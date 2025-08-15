@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="@assets/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload stylesheet" href="@assets/main.css" as="style">
+    <title>Vite App</title>
+  </head>
+  <body>
+    <h1 class="text-3xl font-bold underline">
+      Hello world!
+    </h1>
+    <img src="@assets/javascript.svg"/> 
+    <h1>{{ title }}</h1>
+    <a href="/posts">Пасты</a>
+    {% embed "@components/block.twig" %}
+      {% block content %}Abobeus{% endblock %}
+    {% endembed %}
+  </body>
+</html>
