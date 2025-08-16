@@ -9,6 +9,7 @@ export default {
       assetsDir: './src/assets',
       assetsAlias: '@assets',
       assetsBasePath: '/some/assets/folder',
+      dtoNamespace: 'App\\Dto',
     }),
     // tailwindcss(),
   ],

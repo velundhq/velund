@@ -13,6 +13,7 @@
     "vite": "^7.1.2"
   },
   "dependencies": {
+    "@sinclair/typebox": "^0.34.39",
     "@tailwindcss/postcss": "^4.1.12",
     "fast-glob": "^3.3.3",
     "postcss": "^8.5.6",

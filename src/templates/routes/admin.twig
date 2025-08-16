@@ -116,7 +116,7 @@
                 <div class="flex items-center">
                     <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
                     <div class="ml-3">
-                        <p class="text-sm font-medium text-white">Tom Cook</p>
+                        <p class="text-sm font-medium text-white">{{user.first_name}} {{user.last_name}}</p>
                         <p class="text-xs text-gray-400">View profile</p>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
 
         <!-- Main Content -->
         <main class="flex-1 p-6 bg-gray-100">
-            <h1 class="text-2xl font-semibold text-gray-900">Dashboard</h1>
+            <h1 class="text-2xl font-semibold text-gray-900">{{page_title}}</h1>
             <div class="mt-4 p-6 bg-white rounded-lg shadow-md">
                 <p class="text-gray-600">This is a dark sidebar example with submenus.</p>
             </div>

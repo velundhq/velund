@@ -4,6 +4,8 @@ import path from 'path';
 import { promises as fsp } from 'fs';
 import fg from 'fast-glob';
 import chokidar from 'chokidar';
+import { Value } from '@sinclair/typebox/value';
+import { generatePhpDtoWithPhpDoc } from './dto-geneerator';
 
 export default function twigPagesPlugin({
   templatesDir = './src/templates',
@@ -11,6 +13,7 @@ export default function twigPagesPlugin({
   assetsDir = './src/assets',
   assetsAlias = '@assets',
   assetsBasePath = '/assets',
+  dtoNamespace = 'App\\Dto',
 } = {}) {
   let twigFiles = [];
   let assetEntries = new Set();
@@ -71,10 +74,23 @@ export default function twigPagesPlugin({
       .render(context);
   };
 
+  const getDtoFilename = (routePath) => {
+    // Обрабатываем корневой случай
+    if (routePath === '/') return 'Index';
+
+    // Обрабатываем остальные пути
+    return routePath
+      .replace(/^\//, '') // Убираем ведущий слэш
+      .replace(/\/index$/, '') // Убираем /index в конце
+      .replace(/\/([a-z])/g, (_, char) => char.toUpperCase()) // camelCase преобразование
+      .replace(/[^\w]/g, ''); // Оставляем только буквы/цифры
+  };
+
   async function copyDirToDist(srcDir, distDir, baseDir, options = {}) {
     const {
       excludeJsonIfTwigExists = false, // Новая опция - исключать json если есть twig
       excludeAllJson = false, // Просто исключать все json файлы
+      excludeSchemaFiles = true,
     } = options;
 
     const entries = await fsp.readdir(srcDir, { withFileTypes: true });
@@ -99,6 +115,10 @@ export default function twigPagesPlugin({
           if (fs.existsSync(twigFilePath)) {
             shouldExclude = true;
           }
+        }
+
+        if (excludeSchemaFiles && entry.name.endsWith('.schema.js')) {
+          shouldExclude = true;
         }
 
         if (!shouldExclude) {
@@ -164,24 +184,27 @@ export default function twigPagesPlugin({
           );
           if (!matchedFile) return next();
 
-          // Логируем обработку запроса
-          // console.log(`[Twig] Rendering: ${matchedFile} for route ${route}`);
-
-          // Ищем JSON рядом с twig для контекста
-          const jsonFile = matchedFile + '.json';
+          // Ищем файл схемы (заменяем расширение .twig на .schema.js)
+          const schemaFile = matchedFile.replace(/\.twig$/, '.schema.js');
           let context = {};
 
-          if (fs.existsSync(jsonFile)) {
+          if (fs.existsSync(schemaFile)) {
             try {
-              const jsonContent = await fsp.readFile(jsonFile, 'utf-8');
-              context = JSON.parse(jsonContent);
+              // Динамически импортируем схему
+              const schemaModule = await import(
+                `file://${path.resolve(schemaFile)}?t=${Date.now()}`
+              );
+
+              if (schemaModule.default) {
+                // Если схема использует TypeBox, получаем default values
+                context = Value.Create(schemaModule.default);
+              }
             } catch (err) {
               console.error(
-                `❌ Failed to parse JSON context for ${matchedFile}:`,
+                `❌ Failed to load schema for ${matchedFile}:`,
                 err
               );
-              // Можно добавить контекст в шаблон для отладки
-              context._jsonError = `JSON parsing error: ${err.message}`;
+              context._schemaError = `Schema error: ${err.message}`;
             }
           }
 
@@ -279,8 +302,11 @@ export default function twigPagesPlugin({
     async generateBundle(_, bundle) {
       const distRoot = path.resolve('dist');
       const templatesDistRoot = path.join(distRoot, 'templates');
-      const namespaces = {};
+      const dtoOutputDir = path.join(distRoot, 'dto');
 
+      // Обработка неймспейсов
+      const namespaces = {};
+      namespaces.root = templatesDir; // Добавляем корневой неймспейс
       const templateDirEntries = await fsp.readdir(templatesDir, {
         withFileTypes: true,
       });
@@ -289,18 +315,55 @@ export default function twigPagesPlugin({
           namespaces[entry.name] = path.join(templatesDir, entry.name);
         }
       }
-      namespaces.root = templatesDir; // Добавляем корневой неймспейс
 
+      // Генерация DTO
+      await fsp.mkdir(dtoOutputDir, { recursive: true });
+      for (const file of twigFiles) {
+        const schemaFile = file.replace(/\.twig$/, '.schema.js');
+        if (fs.existsSync(schemaFile)) {
+          try {
+            // Загружаем схему
+            const schemaModule = await import(
+              `file://${path.resolve(schemaFile)}`
+            );
+            const schema = schemaModule.default;
+
+            // Преобразуем имя файла по новой логике
+            const routePath = getRouteFromFile(file);
+            const dtoFilename = getDtoFilename(routePath);
+            const dtoPath = path.join(
+              dtoOutputDir,
+              dtoFilename + 'TemplateDto.php'
+            );
+
+            // Сериализуем схему
+            const dtoContent = generatePhpDtoWithPhpDoc(
+              schema,
+              dtoFilename + 'TemplateDto',
+              dtoNamespace
+            );
+            // const dtoContent = JSON.stringify(schema, null, 2);
+
+            await fsp.writeFile(dtoPath, dtoContent, 'utf-8');
+          } catch (err) {
+            console.error(`❌ Failed to process schema ${schemaFile}:`, err);
+          }
+        }
+      }
+
+      //Перенос шаблонов
       await copyDirToDist(
         path.resolve(templatesDir),
         templatesDistRoot,
         path.resolve(templatesDir),
         {
           excludeJsonIfTwigExists: true,
-          excludeAllJson: false,
+          excludeAllJson: true,
+          excludeSchemaFiles: true,
         }
       );
 
+      // Сборка ассетов
       const assetMap = {};
 
       // Строим карту оригинал → хешированный путь
