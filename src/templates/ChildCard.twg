@@ -1,0 +1,14 @@
+<template>
+  <h2>{{ aboba }}</h2>
+</template>
+
+<script>
+  import { defineTemplate } from '../../plugins/twig-bitrix/common/defineTemplate.js';
+
+  export default defineTemplate({
+    name: 'ChildCard',
+    fetch: ({ aboba }) => ({
+      aboba,
+    }),
+  });
+</script>

@@ -9,7 +9,9 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/node": "^24.3.0",
     "chokidar": "^4.0.3",
+    "typescript": "^5.9.2",
     "vite": "^7.1.2"
   },
   "dependencies": {
@@ -20,6 +22,6 @@
     "sass": "^1.90.0",
     "scss": "^0.2.4",
     "tailwindcss": "^4.1.12",
-    "twig": "^1.17.1"
+    "twing": "^7.2.1"
   }
 }
