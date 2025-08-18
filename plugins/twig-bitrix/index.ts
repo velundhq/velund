@@ -15,25 +15,27 @@ export default function twigPlugin(config: Partial<iTwigPluginConfig>) {
     ...devServer(options),
     ...buildPlugin(options),
 
-    transform(code: string, id: string) {
-      if (!id.endsWith('.twg')) return;
+    config(config) {
+      // если в конфиге ещё нет resolve, создаём
+      config.resolve ??= {};
+      config.resolve.extensions ??= [
+        '.mjs',
+        '.js',
+        '.ts',
+        '.jsx',
+        '.tsx',
+        '.json',
+      ];
 
-      const templateMatch = code.match(/<template>([\s\S]*?)<\/template>/);
-      const scriptMatch = code.match(/<script>([\s\S]*?)<\/script>/);
+      if (!config.resolve.extensions.includes('.twig')) {
+        config.resolve.extensions.push('.twig');
+      }
+    },
 
-      const template = templateMatch ? templateMatch[1].trim() : '';
-      const script = scriptMatch ? scriptMatch[1].trim() : '';
-
-      // оставляем script как есть
-      // и дописываем экспорт шаблона
-      const result = `
-${script}
-
-export const __template = ${JSON.stringify(template)};
-`;
-
+    async transform(code: string, id: string) {
+      if (!id.endsWith('.twig')) return null;
       return {
-        code: result,
+        code: `export default ${JSON.stringify(code)};`,
         map: null,
       };
     },

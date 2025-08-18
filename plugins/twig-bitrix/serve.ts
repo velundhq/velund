@@ -1,6 +1,5 @@
 import chokidar from 'chokidar';
 import fg from 'fast-glob';
-import path from 'path';
 import url from 'url';
 import type { Plugin, ViteDevServer } from 'vite';
 import defineTwingRenderer from './twig';
@@ -15,7 +14,9 @@ export default function devServer({
 
   // собираем все JS-файлы шаблонов
   const getAllTemplateFiles = async () =>
-    fg.sync(`${templatesDir.replace(/\\/g, '/')}/**/*.twg`, { dot: false });
+    fg.sync(`${templatesDir.replace(/\\/g, '/')}/**/*.twig.(js|ts)`, {
+      dot: false,
+    });
 
   // обновление списка шаблонов и регистрация в Twing
   const updateTemplates = async (server: ViteDevServer) => {
@@ -29,11 +30,8 @@ export default function devServer({
         try {
           const mod = await server.ssrLoadModule(`${file}?t=${Date.now()}`);
 
-          const templateComponent = mod.default(path.resolve(file));
-          templateComponent.template = mod.__template;
-
+          const templateComponent = mod.default;
           setComponent(templateComponent);
-
           newComponentNames.push(templateComponent.name);
         } catch (err) {
           console.warn(`Failed to load template ${file}:`, err);
@@ -83,9 +81,15 @@ export default function devServer({
           );
 
           // рендер по имени компонента
-          const html =
+          let html =
             (await render(componentName, context)) +
             '<script type="module" src="/@vite/client"></script>';
+
+          // правка путей к ассетам
+          html = html.replace(
+            /@assets\//g,
+            '/' + assetsDir.replace(/^\.\/|^\//, '').replace(/\/+$/, '') + '/'
+          );
 
           res.setHeader('Content-Type', 'text/html; charset=utf-8');
           res.end(html);

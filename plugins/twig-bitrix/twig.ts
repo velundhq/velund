@@ -1,15 +1,10 @@
-import {
-  createArrayLoader,
-  createEnvironment,
-  createFunction,
-  TwingExecutionContext,
-} from 'twing';
+import { createArrayLoader, createEnvironment, createFunction } from 'twing';
 
 export interface TemplateComponent {
   name: string;
   template: string;
   schema: Record<string, any>;
-  fetch?: (ctx: Record<string, any>) => any | Promise<any>;
+  prepare?: (ctx: Record<string, any>) => any | Promise<any>;
 }
 
 export default function defineTwingRenderer() {
@@ -19,13 +14,14 @@ export default function defineTwingRenderer() {
 
   env.addFunction(
     createFunction(
-      'fetch_context',
+      'prepare_context',
       async (context) => {
         const component = componentRegistry.get(context.template.name);
-        if (component?.fetch) {
-          const data = await component.fetch(
+        if (component?.prepare) {
+          const data = await component.prepare(
             Object.fromEntries(context.context.entries())
           );
+
           Object.entries(data).forEach(([key, val]) =>
             context.context.set(key, val)
           );
@@ -43,7 +39,7 @@ export default function defineTwingRenderer() {
       componentRegistry.set(comp.name, comp);
       loader.setTemplate(
         comp.name,
-        `{% set _fetch_context = fetch_context() %}\n` + comp.template
+        `{% set _prepare_context = prepare_context() %}\n` + comp.template
       );
     },
     removeComponent: (name: string) => {
@@ -58,8 +54,8 @@ export default function defineTwingRenderer() {
       if (!component) throw new Error(`Component not found: ${name}`);
 
       let extra = {};
-      if (component.fetch) {
-        extra = await component.fetch(context);
+      if (component.prepare) {
+        extra = await component.prepare(context);
       }
       const finalContext = { ...context, ...extra };
       return env.render(name, finalContext);
