@@ -1,0 +1,3 @@
+interface iTwigPluginConfig {
+  assetsUrl: string;
+}
