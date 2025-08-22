@@ -16,4 +16,7 @@ export default defineConfig({
     vue(),
     tailwindcss(),
   ],
+  build: {
+    outDir: '../express-app/veland',
+  },
 });

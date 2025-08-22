@@ -20,6 +20,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.21.2
+      twing:
+        specifier: ^7.2.1
+        version: 7.2.1
     devDependencies:
       '@types/express':
         specifier: ^4.17.21
@@ -27,17 +30,17 @@ importers:
       '@types/node':
         specifier: ^20.11.30
         version: 20.19.11
+      '@velund/ts-example-app':
+        specifier: workspace:^
+        version: link:../ts-app
       ts-node-dev:
         specifier: ^2.0.0
         version: 2.0.0(@types/node@20.19.11)(typescript@5.9.2)
       typescript:
         specifier: ^5.6.3
         version: 5.9.2
-      velund-components:
-        specifier: workspace:^
-        version: link:../lib
 
-  examples/lib:
+  examples/express-app/veland/lib:
     dependencies:
       twing:
         specifier: ^7.2.1

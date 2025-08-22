@@ -15,7 +15,7 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
 
   const options: iTwigPluginConfig = Object.assign(defaultConfig, config || {});
 
-  options.generators.push(nodeGenerator());
+  options.generators.push(nodeGenerator(options.nodeConfig));
   options.renderers.push(htmlRenderer());
 
   // Check renderers
