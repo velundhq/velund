@@ -1,0 +1,41 @@
+{
+  "name": "velund",
+  "private": false,
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./common": {
+      "import": "./dist/common.js",
+      "types": "./dist/common/common.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^24.3.0",
+    "chokidar": "^4.0.3"
+  },
+  "peerDependencies": {
+    "@sinclair/typebox": "^0.34.39",
+    "esbuild": "^0.25.9",
+    "vite": "^7.1.2"
+  },
+  "dependencies": {
+    "@velund/core": "workspace:^",
+    "@velund/node": "workspace:^",
+    "@velund/html": "workspace:^",
+    "fast-glob": "^3.3.3",
+    "node-html-parser": "^7.0.1",
+    "twing": "^7.2.1"
+  }
+}

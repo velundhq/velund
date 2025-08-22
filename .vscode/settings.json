@@ -1,7 +1,6 @@
 {
   "files.associations": {
-    "*.twig": "twig",
-    "*.twg": "twig"
+    "*.twig": "twig"
   },
   "emmet.includeLanguages": {
     "twig": "html"
@@ -9,7 +8,7 @@
   "[twig]": {
     "editor.defaultFormatter": "mblode.twig-language-2"
   },
-  "[twg]": {
+  "[velund]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

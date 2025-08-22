@@ -1,10 +1,14 @@
 {
-  "name": "twg",
+  "name": "@velund/workspace",
+  "private": "true",
   "version": "1.0.0",
   "description": "",
   "scripts": {
     "build": "pnpm -r build",
-    "example:dev": "pnpm run -F @twg/example dev"
+    "build:vite": "pnpm run -F velund build",
+    "build:core": "pnpm run -F @velund/core build",
+    "build:example": "pnpm run -F @velund/example build",
+    "dev:example": "pnpm run -F @velund/example dev"
   },
   "workspaces": [
     "packages/*"
@@ -14,6 +18,6 @@
   "license": "ISC",
   "devDependencies": {
     "prettier": "^3.0.0",
-    "typescript": "^5.7.2"
+    "typescript": "^5.9.2"
   }
 }
