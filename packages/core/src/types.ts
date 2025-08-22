@@ -43,6 +43,7 @@ export type VelundComponentDescriptor<
 
 export type VelundRendererDescriptor = {
   id: string;
+  templateExtensions?: string[];
   setComponents: (components: VelundComponentDescriptor[]) => void;
   render: (
     name: string,

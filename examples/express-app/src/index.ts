@@ -4,11 +4,11 @@ import {
   HomePageComponent,
   ProductPageComponent,
   Renderer,
-} from '../veland/lib';
+} from '../velund/lib';
 const app = express();
 const port = 3333;
 
-const publicDir = path.join(process.cwd(), 'veland/assets');
+const publicDir = path.join(process.cwd(), 'velund/assets');
 app.use('/assets', express.static(publicDir));
 
 HomePageComponent.registerPrepare(async () => {

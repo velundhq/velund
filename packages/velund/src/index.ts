@@ -31,6 +31,17 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
     throw new Error(
       `Generator "${options.generator}" can't build "${options.renderer}" renderer`
     );
+  const templateExtensions: string[] = [];
+
+  options.renderers.forEach((r) => {
+    if (![options.renderer, 'html'].includes(r.id)) return;
+    r.templateExtensions?.forEach((ext) => {
+      templateExtensions.push(ext.startsWith('.') ? ext : `.${ext}`);
+    });
+  });
+  console.log(`Used generator: ${options.generator}`);
+  console.log(`Used renderer: ${options.renderer}`);
+  console.log(`Used template extensions: ${templateExtensions.join(', ')}`);
 
   return {
     name: 'vite-twig-bitrix-plugin',
@@ -40,7 +51,8 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
     ),
     ...buildPlugin(
       options,
-      options.generators.find((g) => g.id === options.generator)!
+      options.generators.find((g) => g.id === options.generator)!,
+      templateExtensions
     ),
 
     config(config: any) {
@@ -55,9 +67,11 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
         '.json',
       ];
 
-      if (!config.resolve.extensions.includes('.twig')) {
-        config.resolve.extensions.push('.twig');
-      }
+      templateExtensions.forEach((ext) => {
+        if (!config.resolve.extensions.includes(ext)) {
+          config.resolve.extensions.push(ext);
+        }
+      });
 
       // Устанавливаем стандартный input
       if (!config.build) config.build = {};
@@ -67,13 +81,15 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
     },
 
     async transform(code: string, id: string) {
-      if (id.endsWith('.twig')) {
-        // TODO: Вынести
-        return {
-          code: `export default ${JSON.stringify(code)};`,
-          map: null,
-        };
+      for (const ext of templateExtensions) {
+        if (id.endsWith(ext)) {
+          return {
+            code: `export default ${JSON.stringify(code)};`,
+            map: null,
+          };
+        }
       }
+
       return null;
     },
   };

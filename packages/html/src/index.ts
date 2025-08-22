@@ -4,6 +4,7 @@ const htmlRenderer = defineVelundRenderer(() => {
   const components = new Map<string, VelundComponentDescriptor>();
   return {
     id: 'html',
+    templateExtensions: ['.html', '.htm'],
     setComponents(items) {
       components.clear();
       items.forEach((comp) => {

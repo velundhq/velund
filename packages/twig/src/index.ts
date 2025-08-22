@@ -29,6 +29,7 @@ const twigRenderer = defineVelundRenderer(() => {
 
   return {
     id: 'twig',
+    templateExtensions: ['.twig'],
     setComponents(items) {
       components.clear();
       items.forEach((comp) => {

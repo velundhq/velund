@@ -8,7 +8,8 @@ import { VelundGeneratorDescriptor } from '@velund/core';
 
 const buildPlugin = (
   opts: iTwigPluginConfig,
-  generator: VelundGeneratorDescriptor
+  generator: VelundGeneratorDescriptor,
+  extensions: string[]
 ): Partial<Plugin> => {
   const assetSet = new Set<string>();
   let rollupInput: string;
@@ -33,9 +34,9 @@ const buildPlugin = (
     async buildStart() {
       if (this.meta?.watchMode) return;
       const templatesGlob = [
-        './src/**/*.vel.ts',
-        './src/**/*.vel.js',
-        './src/**/*.twig', //TODO: вынести
+        './**/*.vel.ts',
+        './**/*.vel.js',
+        ...extensions.map((ext) => `./**/*${ext}`),
       ];
 
       const files = await fg(templatesGlob, { absolute: true });

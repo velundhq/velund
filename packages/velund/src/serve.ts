@@ -23,11 +23,10 @@ export default function devServer(
     const newComponentNames: string[] = [];
     const newComponents: VelundComponentDescriptor[] = [];
 
-    entryModule.default?.components?.forEach((template: any) => {
-      if (!template) return;
-      newComponents.push();
-      renderer.setComponents(template);
-      newComponentNames.push(template.name);
+    entryModule.default?.components?.forEach((comp: any) => {
+      if (!comp) return;
+      newComponents.push(comp);
+      newComponentNames.push(comp.name);
     });
 
     renderer.setComponents(newComponents);

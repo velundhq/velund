@@ -17,6 +17,6 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
-    outDir: '../express-app/veland',
+    outDir: '../express-app/velund',
   },
 });
