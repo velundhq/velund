@@ -8,7 +8,7 @@ import twigRenderer from '@velund/twig';
 export default defineConfig({
   plugins: [
     velundPlugin({
-      generator: 'php',
+      // generator: 'php',
       renderer: 'twig',
       generators: [phpGenerator()],
       renderers: [twigRenderer()],
