@@ -4,14 +4,15 @@ import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
 import phpGenerator from '@velund/php';
 import twigRenderer from '@velund/twig';
+import jinjaRenderer from '@velund/jinja';
 
 export default defineConfig({
   plugins: [
     velundPlugin({
       // generator: 'php',
-      renderer: 'twig',
+      renderer: 'jinja',
       generators: [phpGenerator()],
-      renderers: [twigRenderer()],
+      renderers: [twigRenderer(), jinjaRenderer()],
     }),
     vue(),
     tailwindcss(),

@@ -1,0 +1,27 @@
+{
+  "name": "@velund/jinja",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/nunjucks": "^3.2.6",
+    "@velund/core": "workspace:^"
+  },
+  "dependencies": {
+    "nunjucks": "^3.2.4"
+  }
+}

@@ -12,6 +12,7 @@
     "velund": "workspace:^",
     "@velund/php": "workspace:^",
     "@velund/twig": "workspace:^",
+    "@velund/jinja": "workspace:^",
     "@vitejs/plugin-vue": "^6.0.1",
     "@vue/tsconfig": "^0.8.1",
     "vite": "^7.1.2"

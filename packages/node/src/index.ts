@@ -352,7 +352,7 @@ const nodeGenerator = defineVelundGenerator(
     }
     return {
       id: 'node',
-      renderers: ['html', 'twig'],
+      renderers: ['html', 'twig', 'jinja'],
       generate: generateLibraryJS,
     };
   }

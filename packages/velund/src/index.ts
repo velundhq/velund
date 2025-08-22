@@ -17,7 +17,6 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
 
   options.generators.push(nodeGenerator(options.nodeConfig));
   options.renderers.push(htmlRenderer());
-
   // Check renderers
   if (!options.generators.find((g) => g.id === options.generator))
     throw new Error(`Unknown generator: "${options.generator}"`);
