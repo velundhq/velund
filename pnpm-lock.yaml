@@ -20,6 +20,9 @@ importers:
       express:
         specifier: ^4.18.2
         version: 4.21.2
+      nunjucks:
+        specifier: ^3.2.4
+        version: 3.2.4(chokidar@3.6.0)
       twing:
         specifier: ^7.2.1
         version: 7.2.1
@@ -42,9 +45,9 @@ importers:
 
   examples/express-app/velund/lib:
     dependencies:
-      twing:
-        specifier: ^7.2.1
-        version: 7.2.1
+      nunjucks:
+        specifier: ^3.2.4
+        version: 3.2.4(chokidar@3.6.0)
 
   examples/ts-app:
     dependencies:

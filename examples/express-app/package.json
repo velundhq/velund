@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "twing": "^7.2.1"
+    "twing": "^7.2.1",
+    "nunjucks": "^3.2.4"
   },
   "devDependencies": {
     "@velund/ts-example-app": "workspace:^",
