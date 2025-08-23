@@ -70,6 +70,9 @@ importers:
       '@velund/php':
         specifier: workspace:^
         version: link:../../packages/php
+      '@velund/python':
+        specifier: workspace:^
+        version: link:../../packages/python
       '@velund/twig':
         specifier: workspace:^
         version: link:../../packages/twig
@@ -125,6 +128,19 @@ importers:
         version: link:../core
 
   packages/php:
+    dependencies:
+      '@sinclair/typebox':
+        specifier: ^0.34.40
+        version: 0.34.40
+      '@types/node':
+        specifier: ^24.3.0
+        version: 24.3.0
+    devDependencies:
+      '@velund/core':
+        specifier: workspace:^
+        version: link:../core
+
+  packages/python:
     dependencies:
       '@sinclair/typebox':
         specifier: ^0.34.40
@@ -2099,17 +2115,17 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 20.19.11
+      '@types/node': 24.3.0
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 20.19.11
+      '@types/node': 24.3.0
 
   '@types/estree@1.0.8': {}
 
   '@types/express-serve-static-core@4.19.6':
     dependencies:
-      '@types/node': 20.19.11
+      '@types/node': 24.3.0
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.5
@@ -2144,12 +2160,12 @@ snapshots:
   '@types/send@0.17.5':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 20.19.11
+      '@types/node': 24.3.0
 
   '@types/serve-static@1.15.8':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 20.19.11
+      '@types/node': 24.3.0
       '@types/send': 0.17.5
 
   '@types/strip-bom@3.0.0': {}

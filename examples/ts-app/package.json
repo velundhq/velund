@@ -11,6 +11,7 @@
   "devDependencies": {
     "velund": "workspace:^",
     "@velund/php": "workspace:^",
+    "@velund/python": "workspace:^",
     "@velund/twig": "workspace:^",
     "@velund/jinja": "workspace:^",
     "@vitejs/plugin-vue": "^6.0.1",

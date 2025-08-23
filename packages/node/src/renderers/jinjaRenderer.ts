@@ -26,7 +26,7 @@ export class JinjaRenderer implements IRenderer {
     templates = new Map();
     getSource(name) {
         const tpl = this.templates.get(name);
-        return { src: tpl || '', path: name, noCache: true };
+        return { src: tpl || '', path: name };
     }
     setTemplate(name, src) {
         this.templates.set(name, src);
@@ -37,7 +37,7 @@ export class JinjaRenderer implements IRenderer {
     constructor() {
       this.components = new Map();
       this.loader = new MemoryLoader();
-      this.env = new nunjucks.Environment(this.loader, { noCache: true });
+      this.env = new nunjucks.Environment(this.loader);
       this.env.addGlobal('prepare_context', async function () {
         const componentName = this.ctx?.template?.name;
         if (!componentName) return;

@@ -1,0 +1,27 @@
+{
+  "name": "@velund/python",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@velund/core": "workspace:^"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.40",
+    "@types/node": "^24.3.0"
+  }
+}

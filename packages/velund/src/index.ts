@@ -9,6 +9,7 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
     assetsUrl: '/assets',
     generator: 'node',
     renderer: 'html',
+    strictTemplateExtensions: true,
     generators: [],
     renderers: [],
   };
@@ -33,7 +34,11 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
   const templateExtensions: string[] = [];
 
   options.renderers.forEach((r) => {
-    if (![options.renderer, 'html'].includes(r.id)) return;
+    if (
+      options.strictTemplateExtensions &&
+      ![options.renderer, 'html'].includes(r.id)
+    )
+      return;
     r.templateExtensions?.forEach((ext) => {
       templateExtensions.push(ext.startsWith('.') ? ext : `.${ext}`);
     });

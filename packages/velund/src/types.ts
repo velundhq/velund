@@ -8,6 +8,7 @@ export interface iTwigPluginConfig {
   assetsUrl: string;
   generator: 'node' | string;
   renderer: 'html' | string;
+  strictTemplateExtensions: boolean;
   generators: VelundGeneratorDescriptor[];
   renderers: VelundRendererDescriptor[];
   nodeConfig?: VelundNodeGeneratorOptions;
