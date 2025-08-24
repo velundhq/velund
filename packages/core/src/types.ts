@@ -45,10 +45,21 @@ export type VelundRendererDescriptor = {
   id: string;
   templateExtensions?: string[];
   setComponents: (components: VelundComponentDescriptor[]) => void;
-  render: (
+  render(
     name: string,
-    context?: Record<string, any>
-  ) => Promise<string> | string;
+    context: Record<string, any> | undefined,
+    meta: true
+  ): Promise<{ context: Record<string, any>; html: string }>;
+  render(
+    name: string,
+    context?: Record<string, any>,
+    meta?: false
+  ): Promise<string>;
+  render(
+    name: string,
+    context?: Record<string, any>,
+    meta?: boolean
+  ): Promise<any>;
 };
 
 // Generator

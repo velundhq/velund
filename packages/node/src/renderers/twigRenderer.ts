@@ -53,9 +53,9 @@ export class TwigRenderer implements IRenderer {
         this.loader.setTemplate(c.name,"{% set _prepare_context = prepare_context() %}\\n"+c.template);
       }
     }
-    async render(name,context={}) {
-      const c=this.components[name];
-      if(!c) throw new Error("Component not found: "+name);
+    async render(name, context = {}, meta = false) {
+      const c = this.components[name];
+      if (!c) throw new Error('Component not found: ' + name);
       if(c.hasPrepare){
         const fn=PrepareRegistry.get(name);
         if(fn){
@@ -63,7 +63,13 @@ export class TwigRenderer implements IRenderer {
           Object.assign(context,extra);
         }
       }
-      return this.env.render(name,context);
+      if (meta) {
+        return {
+          context,
+          html: await this.env.render(name, context)
+        }
+      }
+      return this.env.render(name, context);
     }
   }
   module.exports={
@@ -84,7 +90,21 @@ export class TwigRenderer implements IRenderer {
     private components:Record<string,{name:string;template:string;hasPrepare:boolean}>;
     constructor();
     private registerAllComponents():void;
-    render(name:${components.map((c) => `"${c.name}"`).join('|')},context?:Record<string,any>):Promise<string>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context: Record<string, any> | undefined,
+      meta: true
+    ): Promise<{ context: Record<string, any>; html: string }>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context?: Record<string, any>,
+      meta?: false
+    ): Promise<string>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context?: Record<string, any>,
+      meta?: boolean
+    ): Promise<any>;
   }
   export {
     PrepareRegistry,

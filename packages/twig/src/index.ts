@@ -40,7 +40,7 @@ const twigRenderer = defineVelundRenderer(() => {
         );
       });
     },
-    async render(name, context) {
+    async render(name, context, meta): Promise<any> {
       const component = components.get(name);
       if (!component) throw new Error(`Component not found: ${name}`);
       let extra = {};
@@ -48,7 +48,8 @@ const twigRenderer = defineVelundRenderer(() => {
         extra = await component.prepare(context);
       }
       const finalContext = { ...context, ...extra };
-      return env.render(name, finalContext);
+      const html = await env.render(name, finalContext);
+      return meta ? { html, context: finalContext } : html;
     },
   };
 });

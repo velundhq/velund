@@ -29,14 +29,14 @@ export class HtmlRenderer implements IRenderer {
       const list=[${componentList}];
       for(const c of list){this.components[c.name]=c;}
     }
-    async render(name,context={}){
+    async render(name,context={},meta=false){
       const c=this.components[name];
       if(!c) throw new Error("Component not found: "+name);
       if(c.hasPrepare){
         const fn=PrepareRegistry.get(name);
         if(fn){const extra=await fn(context);Object.assign(context,extra);}
       }
-      return c.template;
+      return meta ? {context, html: c.template} : c.template;
     }
   }
   module.exports={
@@ -54,8 +54,27 @@ export class HtmlRenderer implements IRenderer {
     private components:Record<string,{name:string;template:string;hasPrepare:boolean}>;
     constructor();
     private registerAllComponents():void;
-    render(name:string,context?:Record<string,any>):Promise<string>;
-  }`;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context: Record<string, any> | undefined,
+      meta: true
+    ): Promise<{ context: Record<string, any>; html: string }>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context?: Record<string, any>,
+      meta?: false
+    ): Promise<string>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context?: Record<string, any>,
+      meta?: boolean
+    ): Promise<any>;
+  }
+    
+  export {
+    PrepareRegistry,
+    ${components.map((c) => `${c.name}Component`).join(',\n  ')}
+  };`;
 
     fs.writeFileSync(path.join(outDir, 'Renderer.d.ts'), rendererDts, 'utf-8');
   }

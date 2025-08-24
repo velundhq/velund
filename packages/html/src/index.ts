@@ -11,8 +11,16 @@ const htmlRenderer = defineVelundRenderer(() => {
         components.set(comp.name, comp);
       });
     },
-    render(name) {
-      return components.get(name)?.template || '';
+    async render(name, context, meta): Promise<any> {
+      const component = components.get(name);
+      if (!component) throw new Error(`Component not found: ${name}`);
+      let extra = {};
+      if (component.prepare) {
+        extra = await component.prepare(context);
+      }
+      const finalContext = { ...context, ...extra };
+      const html = component.template;
+      return meta ? { html, context: finalContext } : html;
     },
   };
 });

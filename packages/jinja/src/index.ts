@@ -42,7 +42,7 @@ const jinjaRenderer = defineVelundRenderer(() => {
         );
       });
     },
-    async render(name, context) {
+    async render(name, context, meta) {
       const comp = components.get(name);
       if (!comp) throw new Error(`Component not found: ${name}`);
 
@@ -52,10 +52,18 @@ const jinjaRenderer = defineVelundRenderer(() => {
       }
       const finalContext = { ...context, ...extra };
 
-      return new Promise<string>((resolve, reject) => {
+      return new Promise<any>((resolve, reject) => {
         env.render(name, finalContext, (err, res) => {
           if (err) reject(err);
-          else resolve(res || '');
+          else
+            resolve(
+              meta
+                ? {
+                    context: finalContext,
+                    html: res || '',
+                  }
+                : res || ''
+            );
         });
       });
     },

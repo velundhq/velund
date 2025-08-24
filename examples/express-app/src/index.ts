@@ -5,7 +5,6 @@ import {
   ProductPageComponent,
   Renderer,
 } from '../velund/lib';
-import { HomePageProps } from '../velund/lib/components/HomePageComponent';
 const app = express();
 const port = 3333;
 
@@ -36,9 +35,12 @@ app.get('/', async (req, res) => {
   res.status(200).send(html).end();
 });
 app.get('/ProductPage', async (req, res) => {
+  const r = await renderer.render('ProductPage', req.query, true);
   res
     .status(200)
-    .send(await renderer.render('ProductPage', req.query))
+    .send(
+      r.html + `<script>window.__DATA__=${JSON.stringify(r.context)}</script>`
+    )
     .end();
 });
 

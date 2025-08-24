@@ -1,7 +1,6 @@
 import chokidar from 'chokidar';
 import url from 'url';
 import type { Plugin, ViteDevServer } from 'vite';
-import defineTwingRenderer from './modules/twig'; // TODO: Вынести
 import { iTwigPluginConfig } from './types';
 import {
   VelundComponentDescriptor,

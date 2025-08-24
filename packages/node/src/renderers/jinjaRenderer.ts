@@ -64,7 +64,7 @@ export class JinjaRenderer implements IRenderer {
       }
     }
 
-    async render(name, context = {}) {
+    async render(name, context = {}, meta = false) {
       const c = this.components.get(name);
       if (!c) throw new Error('Component not found: ' + name);
 
@@ -79,7 +79,7 @@ export class JinjaRenderer implements IRenderer {
       return new Promise((resolve, reject) => {
         this.env.render(name, context, (err, res) => {
           if (err) reject(err);
-          else resolve(res || '');
+          else resolve(meta ? {context, html: res || ''} : res || '');
         });
       });
     }
@@ -110,7 +110,21 @@ export class JinjaRenderer implements IRenderer {
     private env: nunjucks.Environment;
     constructor();
     private registerAllComponents(): void;
-    render(name: ${components.map((c) => `"${c.name}"`).join('|')}, context?: Record<string, any>): Promise<string>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context: Record<string, any> | undefined,
+      meta: true
+    ): Promise<{ context: Record<string, any>; html: string }>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context?: Record<string, any>,
+      meta?: false
+    ): Promise<string>;
+    render(
+      name: ${components.map((c) => `"${c.name}"`).join('|')},
+      context?: Record<string, any>,
+      meta?: boolean
+    ): Promise<any>;
   }
 
   export {

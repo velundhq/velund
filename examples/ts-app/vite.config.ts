@@ -10,8 +10,8 @@ import jinjaRenderer from '@velund/jinja';
 export default defineConfig({
   plugins: [
     velundPlugin({
-      generator: 'python',
-      renderer: 'jinja',
+      generator: 'node',
+      renderer: 'html',
       generators: [phpGenerator(), pythonGenerator()],
       renderers: [twigRenderer(), jinjaRenderer()],
       strictTemplateExtensions: false,
@@ -20,6 +20,6 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
-    outDir: '../python-app/velund',
+    outDir: '../express-app/velund',
   },
 });
