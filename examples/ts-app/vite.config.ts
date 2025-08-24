@@ -20,6 +20,6 @@ export default defineConfig({
     tailwindcss(),
   ],
   build: {
-    outDir: '../express-app/velund',
+    outDir: '../python-app/velund',
   },
 });

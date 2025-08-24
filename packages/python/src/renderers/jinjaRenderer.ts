@@ -19,7 +19,7 @@ export class JinjaRenderer implements IRenderer {
       .join('\n');
 
     const componentExports = components
-      .map((c) => `${c.name}Component`)
+      .map((c) => `"${c.name}Component"`)
       .join(',\n    ');
 
     const rendererPy = `from typing import Any, Dict
@@ -46,27 +46,12 @@ class Renderer:
     def __init__(self) -> None:
         self.components: Dict[str, Any] = {}
         self.loader = MemoryLoader()
-        self.env = Environment(loader=self.loader)
-
-        async def prepare_context(context: Dict[str, Any]):
-            component_name = context.get("template", {}).get("name")
-            if not component_name:
-                return
-            comp = self.components.get(component_name)
-            if comp and comp.has_prepare:
-                fn = PrepareRegistry.get(component_name)
-                if fn:
-                    data = fn(context)
-                    if hasattr(data, "__await__"):
-                        data = await data
-                    context.update(data)
-
-        self.env.globals["prepare_context"] = prepare_context
+        self.env = Environment(loader=self.loader, enable_async=True)
         self.register_all_components()
 
     def register_all_components(self) -> None:
         list = [
-${componentList}
+            ${componentList}
         ]
         for c in list:
             self.components[c.name] = c
@@ -90,16 +75,33 @@ ${componentList}
                     extra = await extra
                 context.update(extra)
 
+        
+        async def prepare_context():
+            comp = self.components.get(name)
+            if comp and comp.has_prepare:
+                fn = PrepareRegistry.get(name)
+                if fn:
+                    data = fn(context.copy())
+                    if hasattr(data, "__await__"):
+                        data = await data
+                    context.update(data)
+            return {};
+
+        
+        render_context = context.copy()
+        render_context['prepare_context'] = prepare_context
+
         template = self.env.get_template(name)
-        return template.render(context)
+        return await template.render_async(render_context)
+
+
 
 
 __all__ = [
     "Renderer",
     "PrepareRegistry",
     ${componentExports}
-]
-`;
+]`;
 
     fs.writeFileSync(path.join(outDir, 'Renderer.py'), rendererPy, 'utf-8');
   }

@@ -6,15 +6,13 @@ export function generateInitPy(
   outDir: string,
   components: VelundComponentDescriptor<any, any>[]
 ) {
-  const initPath = path.join(outDir, 'velund', '__init__.py');
+  const initPath = path.join(outDir, '__init__.py');
 
   const imports = components
-    .map(
-      (c) => `from .components.${c.name}_component import ${c.name}Component`
-    )
+    .map((c) => `from .components.${c.name}Component import ${c.name}Component`)
     .join('\n');
 
-  const registryImports = `from .prepare_registry import register, get`;
+  const registryImports = `from .PrepareRegistry import register, get\nfrom .Renderer import Renderer`;
 
   const componentList = components
     .map((c) => `${c.name} = ${c.name}Component()`)
@@ -31,6 +29,7 @@ ${componentList}
 
 __all__ = [
   ${components.map((c) => `"${c.name}"`).join(', ')},
+  "Renderer",
   "register",
   "get",
 ]

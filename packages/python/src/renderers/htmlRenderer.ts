@@ -19,7 +19,7 @@ export class HtmlRenderer implements IRenderer {
       .join('\n');
 
     const componentExports = components
-      .map((c) => `${c.name}Component`)
+      .map((c) => `"${c.name}Component"`)
       .join(',\n    ');
 
     const rendererPy = `from typing import Any, Dict
