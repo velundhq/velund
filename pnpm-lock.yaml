@@ -43,12 +43,6 @@ importers:
         specifier: ^5.6.3
         version: 5.9.2
 
-  examples/express-app/velund/lib:
-    dependencies:
-      nunjucks:
-        specifier: ^3.2.4
-        version: 3.2.4(chokidar@3.6.0)
-
   examples/ts-app:
     dependencies:
       '@sinclair/typebox':
@@ -94,6 +88,30 @@ importers:
       '@sinclair/typebox':
         specifier: ^0.34.40
         version: 0.34.40
+
+  packages/create:
+    dependencies:
+      kolorist:
+        specifier: ^1.8.0
+        version: 1.8.0
+      prompts:
+        specifier: ^2.4.2
+        version: 2.4.2
+      strip-json-comments:
+        specifier: ^5.0.3
+        version: 5.0.3
+
+  packages/create/my-velund-app:
+    devDependencies:
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+      velund:
+        specifier: ^1.0.2
+        version: 1.0.2(@sinclair/typebox@0.34.40)(esbuild@0.25.9)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0))
+      vite:
+        specifier: ^7.1.2
+        version: 7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0)
 
   packages/html:
     devDependencies:
@@ -177,6 +195,9 @@ importers:
       '@velund/node':
         specifier: workspace:^
         version: link:../node
+      chokidar:
+        specifier: ^4.0.3
+        version: 4.0.3
       esbuild:
         specifier: ^0.25.9
         version: 0.25.9
@@ -186,9 +207,6 @@ importers:
       node-html-parser:
         specifier: ^7.0.1
         version: 7.0.1
-      twing:
-        specifier: ^7.2.1
-        version: 7.2.1
       vite:
         specifier: ^7.1.2
         version: 7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0)
@@ -199,9 +217,6 @@ importers:
       '@types/node':
         specifier: ^24.3.0
         version: 24.3.0
-      chokidar:
-        specifier: ^4.0.3
-        version: 4.0.3
 
 packages:
 
@@ -758,6 +773,15 @@ packages:
   '@types/strip-json-comments@0.0.30':
     resolution: {integrity: sha512-7NQmHra/JILCd1QqpSzl8+mJRc8ZHz3uDm8YV1Ks9IhK0epEiTw8aIErbvH9PI+6XbqhyIQy3462nEsn7UVzjQ==}
 
+  '@velund/core@1.0.1':
+    resolution: {integrity: sha512-7Y4KyVlcjV9rR1tr+9SOQIAI5lyyPtbI8ecaOMkyjrSNh1YMYwd8SJvHlZCK4V2uq/6o6x/HLzHt3wv/dwbPUQ==}
+
+  '@velund/html@1.0.1':
+    resolution: {integrity: sha512-QYYWcNTddSq+YNPS65zeLZUyLXly2RqGOPoEDOE7I6iXLhfzpdBxSJ5PRIuVhq+K5DqPR4wQ63z7sb/CE9OTyg==}
+
+  '@velund/node@1.0.1':
+    resolution: {integrity: sha512-4uC2o76c7IxRlju3y4uHfkpT+Nj6dakhwSDA6aHnxuia78hIwzGLvVDO16NKyal6EqU+ZkE3hMnDF02r5bWrKA==}
+
   '@vitejs/plugin-vue@6.0.1':
     resolution: {integrity: sha512-+MaE752hU0wfPFJEUAIxqw18+20euHHdxVtMvbFcOEpjEyfqXH/5DCoTHiVJ0J29EhTJdoTkjEv5YBKU9dnoTw==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -1214,6 +1238,13 @@ packages:
     resolution: {integrity: sha512-twQoecYPiVA5K/h6SxtORw/Bs3ar+mLUtoPSc7iMXzQzK8d7eJ/R09wmTwAjiamETn1cXYPGfNnu7DMoHgu12w==}
     hasBin: true
 
+  kleur@3.0.3:
+    resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
+    engines: {node: '>=6'}
+
+  kolorist@1.8.0:
+    resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
+
   levenshtein@1.0.5:
     resolution: {integrity: sha512-UQf1nnmxjl7O0+snDXj2YF2r74Gkya8ZpnegrUBYN9tikh2dtxV/ey8e07BO5wwo0i76yjOvbDhFHdcPEiH9aA==}
     engines: {'0': node >=0.2.0}
@@ -1455,6 +1486,10 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
+  prompts@2.4.2:
+    resolution: {integrity: sha512-NxNv/kLguCA7p3jE8oL2aEBsrJWgAakBpgmgK6lpPWV+WuOmY6r2/zbAVnP+T8bQlA0nzHXSJSJW0Hq7ylaD2Q==}
+    engines: {node: '>= 6'}
+
   proxy-addr@2.0.7:
     resolution: {integrity: sha512-llQsMLSUDUPT44jdrU/O37qlnifitDP+ZwrmmZcoSKyLKvtZxpyV0n2/bD/N4tBAAZ/gJEdZU7KMraoK1+XYAg==}
     engines: {node: '>= 0.10'}
@@ -1565,6 +1600,9 @@ packages:
     resolution: {integrity: sha512-ZX99e6tRweoUXqR+VBrslhda51Nh5MTQwou5tnUDgbtyM0dBgmhEDtWGP/xbKn6hqfPRHujUNwz5fy/wbbhnpw==}
     engines: {node: '>= 0.4'}
 
+  sisteransi@1.0.5:
+    resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
+
   snake-case@2.1.0:
     resolution: {integrity: sha512-FMR5YoPFwOLuh4rRz92dywJjyKYZNLpMn1R5ujVpIYkbA9p01fq8RMg0FkO4M+Yobt4MjHeLTJVm5xFFBHSV2Q==}
 
@@ -1593,6 +1631,10 @@ packages:
   strip-json-comments@2.0.1:
     resolution: {integrity: sha512-4gB8na07fecVVkOI6Rs4e7T6NOTki5EmL7TUduTs6bu3EdnSycntVJ4re8kgZA+wx9IueI2Y11bfbgwtzuE0KQ==}
     engines: {node: '>=0.10.0'}
+
+  strip-json-comments@5.0.3:
+    resolution: {integrity: sha512-1tB5mhVo7U+ETBKNf92xT4hrQa3pm0MZ0PQvuDnWgAAGHDsfp4lPSpiS6psrSiet87wyGPh9ft6wmhOMQ0hDiw==}
+    engines: {node: '>=14.16'}
 
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
@@ -1672,6 +1714,11 @@ packages:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
     engines: {node: '>= 0.4'}
 
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   typescript@5.9.2:
     resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
@@ -1700,6 +1747,13 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
+
+  velund@1.0.2:
+    resolution: {integrity: sha512-DpFk62iXHsfmA4UnOrjgrbLgubfbRuSbq4WgdhnUxB7l7S5pfDOlaX67tWpEe4SY8PpMjaEKQTxxfL2QZyhArQ==}
+    peerDependencies:
+      '@sinclair/typebox': ^0.34.39
+      esbuild: ^0.25.9
+      vite: ^7.1.2
 
   vite@7.1.3:
     resolution: {integrity: sha512-OOUi5zjkDxYrKhTV3V7iKsoS37VUM7v40+HuwEmcrsf11Cdx9y3DIr2Px6liIcZFwt3XSRpQvFpL3WVy7ApkGw==}
@@ -2171,6 +2225,17 @@ snapshots:
   '@types/strip-bom@3.0.0': {}
 
   '@types/strip-json-comments@0.0.30': {}
+
+  '@velund/core@1.0.1':
+    dependencies:
+      '@sinclair/typebox': 0.34.40
+
+  '@velund/html@1.0.1': {}
+
+  '@velund/node@1.0.1':
+    dependencies:
+      '@sinclair/typebox': 0.34.40
+      '@types/node': 24.3.0
 
   '@vitejs/plugin-vue@6.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0))(vue@3.5.19(typescript@5.9.2))':
     dependencies:
@@ -2694,6 +2759,10 @@ snapshots:
 
   jiti@2.5.1: {}
 
+  kleur@3.0.3: {}
+
+  kolorist@1.8.0: {}
+
   levenshtein@1.0.5: {}
 
   lightningcss-darwin-arm64@1.30.1:
@@ -2870,6 +2939,11 @@ snapshots:
 
   prettier@3.6.2: {}
 
+  prompts@2.4.2:
+    dependencies:
+      kleur: 3.0.3
+      sisteransi: 1.0.5
+
   proxy-addr@2.0.7:
     dependencies:
       forwarded: 0.2.0
@@ -3038,6 +3112,8 @@ snapshots:
       side-channel-map: 1.0.1
       side-channel-weakmap: 1.0.2
 
+  sisteransi@1.0.5: {}
+
   snake-case@2.1.0:
     dependencies:
       no-case: 2.3.2
@@ -3060,6 +3136,8 @@ snapshots:
   strip-bom@3.0.0: {}
 
   strip-json-comments@2.0.1: {}
+
+  strip-json-comments@5.0.3: {}
 
   supports-preserve-symlinks-flag@1.0.0: {}
 
@@ -3170,6 +3248,8 @@ snapshots:
       es-errors: 1.3.0
       is-typed-array: 1.1.15
 
+  typescript@5.8.3: {}
+
   typescript@5.9.2: {}
 
   undici-types@6.21.0: {}
@@ -3185,6 +3265,18 @@ snapshots:
   v8-compile-cache-lib@3.0.1: {}
 
   vary@1.1.2: {}
+
+  velund@1.0.2(@sinclair/typebox@0.34.40)(esbuild@0.25.9)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0)):
+    dependencies:
+      '@sinclair/typebox': 0.34.40
+      '@velund/core': 1.0.1
+      '@velund/html': 1.0.1
+      '@velund/node': 1.0.1
+      chokidar: 4.0.3
+      esbuild: 0.25.9
+      fast-glob: 3.3.3
+      node-html-parser: 7.0.1
+      vite: 7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0)
 
   vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0):
     dependencies:

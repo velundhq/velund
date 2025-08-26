@@ -1,0 +1,21 @@
+{
+  "name": "create-velund",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Scaffolder for Velund projects (vite + velund + templates)",
+  "type": "module",
+  "bin": {
+    "create-velund": "bin/index.js"
+  },
+  "keywords": [
+    "velund",
+    "scaffold",
+    "create-velund"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "kolorist": "^1.8.0",
+    "prompts": "^2.4.2",
+    "strip-json-comments": "^5.0.3"
+  }
+}
