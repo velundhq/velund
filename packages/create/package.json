@@ -1,6 +1,6 @@
 {
   "name": "create-velund",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Scaffolder for Velund projects (vite + velund + templates)",
   "type": "module",

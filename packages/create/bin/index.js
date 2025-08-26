@@ -25,7 +25,6 @@ function writeFile(filePath, content) {
 function generateViteConfig({ language, generator, renderer }) {
   const lines = [];
   lines.push("import { defineConfig } from 'vite';");
-  lines.push('');
   lines.push("import velund from 'velund';");
   lines.push('');
 
@@ -98,7 +97,7 @@ function generateViteConfig({ language, generator, renderer }) {
       name: 'generator',
       message: 'Generator',
       choices: [
-        { title: 'node*', value: 'node' },
+        { title: 'node', value: 'node' },
         { title: 'php', value: 'php' },
         { title: 'python', value: 'python' },
       ],
@@ -112,7 +111,7 @@ function generateViteConfig({ language, generator, renderer }) {
   }
 
   // динамическое формирование списка шаблонизаторов
-  const availableRenderers = [{ title: 'html*', value: 'html' }];
+  const availableRenderers = [{ title: 'html', value: 'html' }];
   if (['node', 'php'].includes(base.generator))
     availableRenderers.push({ title: 'twig', value: 'twig' });
   if (['node', 'php', 'python'].includes(base.generator))
@@ -136,11 +135,11 @@ function generateViteConfig({ language, generator, renderer }) {
   try {
     let createCmd = '';
     if (pkgManager === 'pnpm')
-      createCmd = `pnpm create vite@latest ${opts.projectName} -- --template ${templateName}`;
+      createCmd = `pnpm create vite@latest ${opts.projectName} -- --template ${templateName} --yes`;
     else if (pkgManager === 'yarn')
-      createCmd = `yarn create vite ${opts.projectName} --template ${templateName}`;
+      createCmd = `yarn create vite ${opts.projectName} --template ${templateName} --yes`;
     else
-      createCmd = `npm create vite@latest ${opts.projectName} -- --template ${templateName}`;
+      createCmd = `npm create vite@latest ${opts.projectName} -- --template ${templateName} --yes`;
 
     console.log(cyan('\nRunning create-vite to scaffold a vanilla project...'));
     execSync(createCmd, { stdio: 'inherit' });
@@ -159,10 +158,10 @@ function generateViteConfig({ language, generator, renderer }) {
   } catch (e) {}
 
   const deps = ['velund'];
-  // if (opts.generator === 'php') deps.push('@zebrains/velund-php');
-  // if (opts.generator === 'python') deps.push('@zebrains/velund-python');
-  // if (opts.renderer === 'twig') deps.push('@zebrains/velund-twig');
-  // if (opts.renderer === 'jinja') deps.push('@zebrains/velund-jinja');
+  if (opts.generator === 'php') deps.push('@zebrains/velund-php');
+  if (opts.generator === 'python') deps.push('@zebrains/velund-python');
+  if (opts.renderer === 'twig') deps.push('@zebrains/velund-twig');
+  if (opts.renderer === 'jinja') deps.push('@zebrains/velund-jinja');
 
   try {
     if (deps.length) {
