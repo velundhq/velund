@@ -6,14 +6,15 @@ import {
   VelundComponentDescriptor,
   VelundRendererDescriptor,
 } from '@velund/core';
+import { TypeCompiler, ValueError } from '@sinclair/typebox/compiler';
 
 export default function devServer(
-  opts: iTwigPluginConfig,
+  options: iTwigPluginConfig,
   renderer: VelundRendererDescriptor
 ): Partial<Plugin> {
   let entry: string;
 
-  let registeredComponentNames: string[] = [];
+  let registeredComponents = new Map<string, VelundComponentDescriptor>();
 
   // обновление списка шаблонов и регистрация в Twing
   const updateTemplates = async (server: ViteDevServer) => {
@@ -21,17 +22,49 @@ export default function devServer(
     const entryModule = await server.ssrLoadModule(input);
     const newComponentNames: string[] = [];
     const newComponents: VelundComponentDescriptor[] = [];
-
+    registeredComponents = new Map();
     entryModule.default?.components?.forEach((comp: any) => {
       if (!comp) return;
       newComponents.push(comp);
       newComponentNames.push(comp.name);
+      registeredComponents.set(comp.name, comp);
     });
 
     renderer.setComponents(newComponents);
-
-    registeredComponentNames = newComponentNames;
   };
+
+  function formatValidationErrors(errors: ValueError[]): string {
+    // Группируем ошибки по пути
+    const errorsByPath: { [path: string]: ValueError[] } = {};
+
+    for (const error of errors) {
+      // Преобразуем путь в dot notation (убираем первый слеш, заменяем остальные на точки)
+      const dotPath = error.path
+        .replace(/^\//, '') // Убираем первый слеш
+        .replace(/\//g, '.'); // Заменяем остальные слеши на точки
+
+      if (!errorsByPath[dotPath]) {
+        errorsByPath[dotPath] = [];
+      }
+      errorsByPath[dotPath].push(error);
+    }
+
+    // Форматируем ошибки для каждого пути
+    const formattedErrors: string[] = [];
+
+    for (const [path, pathErrors] of Object.entries(errorsByPath)) {
+      // Берем оригинальные сообщения без изменений
+      const messages = pathErrors.map((error) => error.message);
+
+      // Убираем дубликаты и объединяем сообщения
+      const uniqueMessages = [...new Set(messages)];
+      const fieldName = path || 'root';
+
+      formattedErrors.push(`• ${fieldName}: ${uniqueMessages.join('; ')}`);
+    }
+
+    return formattedErrors.join('\n');
+  }
 
   return {
     configResolved(resolvedConfig) {
@@ -61,35 +94,64 @@ export default function devServer(
       server.middlewares.use(async (req, res, next) => {
         try {
           if (!req.url) return next();
+          const parsedUrl = url.parse(req.url);
+          const isMetaRender = parsedUrl.pathname
+            ?.toString()
+            .replace(/\/+$/, '')
+            .startsWith(options.renderUrl);
+          let query = Object.fromEntries(
+            new URLSearchParams(parsedUrl.query || '')
+          );
+          const componentName = isMetaRender
+            ? query.component
+            : parsedUrl.pathname?.slice(1).replace(/\/+$/, '');
+          let context = {};
+          if (isMetaRender) {
+            context = JSON.parse(query?.context) || {};
+          } else {
+            context = query?.props || query;
+          }
+
           await updateTemplates(server);
-          const parsed = url.parse(req.url);
-          const componentName = parsed.pathname?.slice(1); // убираем ведущий "/"
-          if (
-            !componentName ||
-            !registeredComponentNames.includes(componentName)
-          ) {
+          if (!componentName || !registeredComponents.has(componentName)) {
             next();
             return;
           }
-
-          // контекст из query-параметров
-          let context = Object.fromEntries(
-            new URLSearchParams(parsed.query || '')
-          );
-          if (context?.props) {
-            context = context?.props as any;
+          const component = registeredComponents.get(componentName);
+          const validateSchema = component?.prepare
+            ? component?.propsSchema || null
+            : component?.contextSchema || null;
+          if (validateSchema) {
+            const cSchema = TypeCompiler.Compile(validateSchema);
+            if (!cSchema.Check(context || {})) {
+              console.warn(
+                `[WARN]: Invalid context data for "${componentName}":`
+              );
+              console.warn(
+                formatValidationErrors([...cSchema.Errors(context || {})])
+              );
+            }
           }
 
-          // рендер по имени компонента
-          let html =
-            (await renderer.render(componentName, context)) +
-            '<script type="module" src="/@vite/client"></script>';
+          const renderResult = await renderer.render(
+            componentName,
+            context,
+            true
+          );
 
-          // правка путей к ассетам
-          html = html.replace(/@\//g, '/src/');
+          renderResult.html = renderResult.html.replace(/@\//g, '/src/');
 
-          res.setHeader('Content-Type', 'text/html; charset=utf-8');
-          res.end(html);
+          res.setHeader(
+            'Content-Type',
+            `${isMetaRender ? 'application/json' : 'text/html'}; charset=utf-8`
+          );
+
+          res.end(
+            isMetaRender
+              ? JSON.stringify(renderResult, null, '\t')
+              : renderResult.html +
+                  '\n<script type="module" src="/@vite/client"></script>'
+          );
         } catch (err: any) {
           console.error('Twig dev render error:', err);
           res.statusCode = 500;

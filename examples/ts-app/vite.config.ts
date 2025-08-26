@@ -11,7 +11,7 @@ export default defineConfig({
   plugins: [
     velundPlugin({
       generator: 'node',
-      renderer: 'html',
+      renderer: 'twig',
       generators: [phpGenerator(), pythonGenerator()],
       renderers: [twigRenderer(), jinjaRenderer()],
       strictTemplateExtensions: false,

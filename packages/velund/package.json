@@ -12,7 +12,7 @@
     },
     "./common": {
       "import": "./dist/common.js",
-      "types": "./dist/common/common.d.ts"
+      "types": "./dist/common.d.ts"
     }
   },
   "scripts": {

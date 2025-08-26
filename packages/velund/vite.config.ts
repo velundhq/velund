@@ -18,7 +18,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         index: resolve(__dirname, 'src/index.ts'),
-        common: resolve(__dirname, 'src/common/common.ts'),
+        common: resolve(__dirname, 'src/common.ts'),
       },
       external: [
         'fs',

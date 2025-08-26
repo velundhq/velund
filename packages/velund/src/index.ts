@@ -3,13 +3,17 @@ import buildPlugin from './build.js';
 import { iTwigPluginConfig } from './types.js';
 import nodeGenerator from '@velund/node';
 import htmlRenderer from '@velund/html';
+import { Plugin } from 'vite';
 
-export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
+export default function twigPlugin(
+  config?: Partial<iTwigPluginConfig>
+): Plugin {
   const defaultConfig: iTwigPluginConfig = {
     assetsUrl: '/assets',
     generator: 'node',
     renderer: 'html',
     strictTemplateExtensions: true,
+    renderUrl: '/__render',
     generators: [],
     renderers: [],
   };
@@ -59,7 +63,7 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
       templateExtensions
     ),
 
-    config(config: any) {
+    config(config, { command }) {
       // если в конфиге ещё нет resolve, создаём
       config.resolve ??= {};
       config.resolve.extensions ??= [
@@ -72,10 +76,16 @@ export default function twigPlugin(config?: Partial<iTwigPluginConfig>) {
       ];
 
       templateExtensions.forEach((ext) => {
-        if (!config.resolve.extensions.includes(ext)) {
-          config.resolve.extensions.push(ext);
+        if (!config.resolve!.extensions!.includes(ext)) {
+          config.resolve!.extensions!.push(ext);
         }
       });
+      if (!config.define) {
+        config.define = {};
+      }
+      config.define['window.__RENDER_URL__'] = JSON.stringify(
+        command == 'serve' ? defaultConfig.renderUrl : options.renderUrl
+      );
 
       // Устанавливаем стандартный input
       if (!config.build) config.build = {};

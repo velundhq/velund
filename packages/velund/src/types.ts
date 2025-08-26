@@ -9,6 +9,7 @@ export interface iTwigPluginConfig {
   generator: 'node' | string;
   renderer: 'html' | string;
   strictTemplateExtensions: boolean;
+  renderUrl: string;
   generators: VelundGeneratorDescriptor[];
   renderers: VelundRendererDescriptor[];
   nodeConfig?: VelundNodeGeneratorOptions;
