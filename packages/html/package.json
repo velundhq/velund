@@ -1,10 +1,15 @@
 {
   "name": "@velund/html",
+  "private": "false",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -15,7 +20,7 @@
     "build": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "me@dantezz.ru",
   "license": "ISC",
   "devDependencies": {
     "@velund/core": "workspace:^"

@@ -1,15 +1,20 @@
 {
   "name": "@velund/core",
+  "private": "true",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc"
   },
   "keywords": [],
-  "author": "",
+  "author": "me@dantezz.ru",
   "license": "ISC",
   "dependencies": {
     "@sinclair/typebox": "^0.34.40"

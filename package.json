@@ -14,7 +14,7 @@
     "packages/*"
   ],
   "keywords": [],
-  "author": "",
+  "author": "me@dantezz.ru",
   "license": "ISC",
   "devDependencies": {
     "prettier": "^3.0.0",
