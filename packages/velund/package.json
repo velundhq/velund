@@ -41,5 +41,8 @@
     "fast-glob": "^3.3.3",
     "node-html-parser": "^7.0.1",
     "twing": "^7.2.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

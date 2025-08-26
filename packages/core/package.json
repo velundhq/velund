@@ -18,5 +18,8 @@
   "license": "ISC",
   "dependencies": {
     "@sinclair/typebox": "^0.34.40"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -24,5 +24,8 @@
   "license": "ISC",
   "devDependencies": {
     "@velund/core": "workspace:^"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

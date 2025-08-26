@@ -28,5 +28,8 @@
   "dependencies": {
     "@sinclair/typebox": "^0.34.40",
     "@types/node": "^24.3.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
