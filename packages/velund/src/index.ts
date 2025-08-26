@@ -4,10 +4,9 @@ import { iTwigPluginConfig } from './types.js';
 import nodeGenerator from '@velund/node';
 import htmlRenderer from '@velund/html';
 import { Plugin } from 'vite';
+import FastGlob from 'fast-glob';
 
-export default function twigPlugin(
-  config?: Partial<iTwigPluginConfig>
-): Plugin {
+export default function velund(config?: Partial<iTwigPluginConfig>): Plugin {
   const defaultConfig: iTwigPluginConfig = {
     assetsUrl: '/assets',
     generator: 'node',
@@ -92,6 +91,33 @@ export default function twigPlugin(
       if (!config.build.rollupOptions) config.build.rollupOptions = {};
       if (!config.build.rollupOptions.input)
         config.build.rollupOptions.input = 'src/main.ts';
+    },
+
+    resolveId(id) {
+      if (id === 'virtual:velund/components') return id;
+      return null;
+    },
+    async load(id) {
+      if (id !== 'virtual:velund/components') return null;
+
+      // Находим все шаблоны в проекте
+      const files = await FastGlob('**/*.vel.{ts,js}', { cwd: process.cwd() });
+
+      // Генерируем импорты
+      const imports = files
+        .map(
+          (file: string, index: any) => `import comp${index} from '/${file}';`
+        )
+        .join('\n');
+
+      const exportObject = files
+        .map((_: any, index: any) => `comp${index}`)
+        .join(', ');
+
+      return `
+        ${imports}
+        export default [${exportObject}];
+      `;
     },
 
     async transform(code: string, id: string) {

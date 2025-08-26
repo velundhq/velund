@@ -1,16 +1,14 @@
+import { VelundComponentDescriptor } from '@velund/core';
+
 export type DefineTemplateOpts = {
   components: string;
 };
 
-export default function defineVelundApp() {
-  const rawTemplates = import.meta.glob('/**/*.vel.{ts,js}', {
-    eager: true,
-  });
+export default function defineVelundApp(
+  components?: VelundComponentDescriptor[]
+) {
   const app = {
-    components: Object.values(rawTemplates).map((tmpl: any) => {
-      if (tmpl.__template) tmpl.default.template = tmpl.__template;
-      return tmpl.default;
-    }),
+    components: components || [],
   };
   Object.assign(globalThis, { __APP__: app });
   return app;

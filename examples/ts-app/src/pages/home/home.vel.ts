@@ -1,9 +1,9 @@
-import { defineTemplate } from '@velund/vite/common';
+import { defineComponent } from '@velund/vite/common';
 import template from './template.j2';
 import { Type } from '@sinclair/typebox';
 import { ProductType } from '../../shared/types';
 
-export default defineTemplate({
+export default defineComponent({
   name: 'HomePage',
   template,
   contextSchema: Type.Object({

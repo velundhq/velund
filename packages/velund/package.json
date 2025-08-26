@@ -1,12 +1,13 @@
 {
   "name": "velund",
   "private": false,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "files": [
     "dist",
+    "types",
     "README.md"
   ],
   "exports": {
@@ -17,6 +18,9 @@
     "./common": {
       "import": "./dist/common.js",
       "types": "./dist/common.d.ts"
+    },
+    "./env": {
+      "types": "./types/env.d.ts"
     }
   },
   "scripts": {
@@ -26,8 +30,7 @@
   },
   "devDependencies": {
     "@types/json-schema": "^7.0.15",
-    "@types/node": "^24.3.0",
-    "chokidar": "^4.0.3"
+    "@types/node": "^24.3.0"
   },
   "peerDependencies": {
     "@sinclair/typebox": "^0.34.39",
@@ -40,7 +43,7 @@
     "@velund/html": "workspace:^",
     "fast-glob": "^3.3.3",
     "node-html-parser": "^7.0.1",
-    "twing": "^7.2.1"
+    "chokidar": "^4.0.3"
   },
   "publishConfig": {
     "access": "public"

@@ -20,16 +20,7 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
         common: resolve(__dirname, 'src/common.ts'),
       },
-      external: [
-        'fs',
-        'path',
-        'url',
-        'vite',
-        'esbuild',
-        'twing',
-        'fast-glob',
-        'node-html-parser',
-      ],
+      external: ['fs', 'path', 'url', 'vite', 'esbuild', 'fast-glob'],
       preserveEntrySignatures: 'exports-only',
       output: {
         format: 'es',
