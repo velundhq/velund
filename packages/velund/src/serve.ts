@@ -7,6 +7,7 @@ import {
   VelundRendererDescriptor,
 } from '@velund/core';
 import { TypeCompiler, ValueError } from '@sinclair/typebox/compiler';
+import genHomePage from './pages/home';
 
 export default function devServer(
   options: iTwigPluginConfig,
@@ -95,6 +96,16 @@ export default function devServer(
         try {
           if (!req.url) return next();
           const parsedUrl = url.parse(req.url);
+
+          await updateTemplates(server);
+
+          if (['', '/'].includes(parsedUrl.pathname || '')) {
+            res.setHeader('Content-Type', `text/html; charset=utf-8`);
+
+            res.end(genHomePage(Array.from(registeredComponents.values())));
+            return;
+          }
+
           const isMetaRender = parsedUrl.pathname
             ?.toString()
             .replace(/\/+$/, '')
@@ -107,12 +118,11 @@ export default function devServer(
             : parsedUrl.pathname?.slice(1).replace(/\/+$/, '');
           let context = {};
           if (isMetaRender) {
-            context = JSON.parse(query?.context) || {};
+            context = JSON.parse(query?.context || '{}');
           } else {
             context = query?.props || query;
           }
 
-          await updateTemplates(server);
           if (!componentName || !registeredComponents.has(componentName)) {
             next();
             return;
@@ -135,7 +145,7 @@ export default function devServer(
 
           const renderResult = await renderer.render(
             componentName,
-            context,
+            context || {},
             true
           );
 

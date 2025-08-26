@@ -16,7 +16,11 @@ const htmlRenderer = defineVelundRenderer(() => {
       if (!component) throw new Error(`Component not found: ${name}`);
       let extra = {};
       if (component.prepare) {
-        extra = await component.prepare(context);
+        try {
+          extra = await component.prepare(context);
+        } catch (e) {
+          console.error(e);
+        }
       }
       const finalContext = { ...context, ...extra };
       const html = component.template;

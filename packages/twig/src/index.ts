@@ -4,7 +4,6 @@ import { createArrayLoader, createEnvironment, createFunction } from 'twing';
 const twigRenderer = defineVelundRenderer(() => {
   const components = new Map<string, VelundComponentDescriptor>();
 
-  // TODO: Вынести пересоздание сюда, либо сделать очистку лоадера
   const loader = createArrayLoader({});
   const env = createEnvironment(loader);
 
@@ -14,9 +13,14 @@ const twigRenderer = defineVelundRenderer(() => {
       async (context) => {
         const component = components.get(context.template.name);
         if (component?.prepare) {
-          const data = await component.prepare(
-            Object.fromEntries(context.context.entries())
-          );
+          let data = {};
+          try {
+            data = await component.prepare(
+              Object.fromEntries(context.context.entries())
+            );
+          } catch (e) {
+            console.error(e);
+          }
 
           Object.entries(data).forEach(([key, val]) =>
             context.context.set(key, val)
@@ -45,7 +49,11 @@ const twigRenderer = defineVelundRenderer(() => {
       if (!component) throw new Error(`Component not found: ${name}`);
       let extra = {};
       if (component.prepare) {
-        extra = await component.prepare(context);
+        try {
+          extra = await component.prepare(context);
+        } catch (e) {
+          console.error(e);
+        }
       }
       const finalContext = { ...context, ...extra };
       const html = await env.render(name, finalContext);

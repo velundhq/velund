@@ -24,7 +24,12 @@ const jinjaRenderer = defineVelundRenderer(() => {
     if (!componentName) return;
     const comp = components.get(componentName);
     if (comp?.prepare) {
-      const data = await comp.prepare(this.ctx);
+      let data = {};
+      try {
+        data = await comp.prepare(this.ctx);
+      } catch (e) {
+        console.error(e);
+      }
       Object.assign(this.ctx, data);
     }
   });
@@ -47,9 +52,14 @@ const jinjaRenderer = defineVelundRenderer(() => {
       if (!comp) throw new Error(`Component not found: ${name}`);
 
       let extra = {};
-      if (comp.prepare) {
-        extra = await comp.prepare(context);
+      try {
+        if (comp.prepare) {
+          extra = await comp.prepare(context);
+        }
+      } catch (e) {
+        console.error(e);
       }
+
       const finalContext = { ...context, ...extra };
 
       return new Promise<any>((resolve, reject) => {

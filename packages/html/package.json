@@ -1,7 +1,7 @@
 {
   "name": "@velund/html",
   "private": false,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "type": "module",
   "main": "./dist/index.js",
