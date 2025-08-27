@@ -66,8 +66,6 @@ const myCustomRenderer = defineVelundRenderer(() => {
 export default myCustomRenderer;
 ```
 
-Хорошо, без глобального туториала. Вот описание для `defineVelundGenerator`, которое можно вставить в `core/README.md`:
-
 ---
 
 ### `defineVelundGenerator(...)`
