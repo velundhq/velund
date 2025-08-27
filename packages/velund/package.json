@@ -1,14 +1,44 @@
 {
   "name": "velund",
+  "description": "Модульная UI-система на Vite для полиглотных бэкендов",
   "private": false,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "author": "DNTZ <me@dantezz.ru>",
   "files": [
     "dist",
     "types",
     "README.md"
+  ],
+  "keywords": [
+    "velund",
+    "vite",
+    "ui-components",
+    "ui-library",
+    "component-system",
+    "frontend",
+    "backend",
+    "typescript",
+    "javascript",
+    "vue",
+    "react",
+    "angular",
+    "generator",
+    "renderer",
+    "twig",
+    "jinja",
+    "php",
+    "python",
+    "html",
+    "template-engine",
+    "modular-ui",
+    "server-side-rendering",
+    "ssr",
+    "web-components",
+    "framework-agnostic",
+    "plugin"
   ],
   "exports": {
     ".": {
@@ -33,7 +63,6 @@
     "@types/node": "^24.3.0"
   },
   "peerDependencies": {
-    "@sinclair/typebox": "^0.34.39",
     "esbuild": "^0.25.9",
     "vite": "^7.1.2"
   },
@@ -43,7 +72,8 @@
     "@velund/html": "workspace:^",
     "fast-glob": "^3.3.3",
     "node-html-parser": "^7.0.1",
-    "chokidar": "^4.0.3"
+    "chokidar": "^4.0.3",
+    "@sinclair/typebox": "^0.34.39"
   },
   "publishConfig": {
     "access": "public"
