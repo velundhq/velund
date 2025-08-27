@@ -55,14 +55,14 @@ pnpm add @velund/node # Для генерации Node.js-библиотеки
 import { defineConfig } from 'vite';
 import velund from 'velund'; // Основной плагин Velund
 import twigRenderer from '@zebrains/velund-twig'; // Пример: рендерер для Twig
-import pythonGenerator from '@zebrains/velund-python'; // Пример: генератор для Python
+import phpGenerator from '@zebrains/velund-php'; // Пример: генератор для PHP
 
 export default defineConfig({
   plugins: [
     velund({
       // -- Основной шаблонизатор и генератор для проекта --
       renderer: 'twig', // Указывает основной шаблонизатор (Twig, Jinja, HTML)
-      generator: 'python', // Указывает основной генератор для бэкенда (Node.js, Python, PHP)
+      generator: 'php', // Указывает основной генератор для бэкенда (Node.js, Python, PHP)
 
       // -- Регистрация рендереров --
       // Все используемые рендереры должны быть зарегистрированы здесь.
@@ -75,7 +75,7 @@ export default defineConfig({
       // Все используемые генераторы должны быть зарегистрированы здесь.
       // @velund/node уже встроен.
       generators: [
-        pythonGenerator(), // Экземпляр Python-генератора
+        phpGenerator(), // Экземпляр Python-генератора
       ],
 
       // -- Опции для интеграции с бэкендом --
