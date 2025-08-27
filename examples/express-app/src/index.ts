@@ -35,13 +35,8 @@ app.get('/', async (req, res) => {
   res.status(200).send(html).end();
 });
 app.get('/ProductPage', async (req, res) => {
-  const r = await renderer.render('ProductPage', req.query, true);
-  res
-    .status(200)
-    .send(
-      r.html + `<script>window.__DATA__=${JSON.stringify(r.context)}</script>`
-    )
-    .end();
+  const r = await renderer.render('ProductPage', req.query);
+  res.status(200).send(r).end();
 });
 
 app.listen(port, () => {
