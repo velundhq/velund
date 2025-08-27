@@ -58,18 +58,6 @@ importers:
         specifier: ^3.5.19
         version: 3.5.19(typescript@5.9.2)
     devDependencies:
-      '@velund/jinja':
-        specifier: workspace:^
-        version: link:../../packages/jinja
-      '@velund/php':
-        specifier: workspace:^
-        version: link:../../packages/php
-      '@velund/python':
-        specifier: workspace:^
-        version: link:../../packages/python
-      '@velund/twig':
-        specifier: workspace:^
-        version: link:../../packages/twig
       '@vitejs/plugin-vue':
         specifier: ^6.0.1
         version: 6.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0))(vue@3.5.19(typescript@5.9.2))
@@ -101,33 +89,8 @@ importers:
         specifier: ^5.0.3
         version: 5.0.3
 
-  packages/create/my-velund-app:
-    devDependencies:
-      typescript:
-        specifier: ~5.8.3
-        version: 5.8.3
-      velund:
-        specifier: ^1.0.2
-        version: 1.0.2(@sinclair/typebox@0.34.40)(esbuild@0.25.9)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0))
-      vite:
-        specifier: ^7.1.2
-        version: 7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0)
-
   packages/html:
     devDependencies:
-      '@velund/core':
-        specifier: workspace:^
-        version: link:../core
-
-  packages/jinja:
-    dependencies:
-      nunjucks:
-        specifier: ^3.2.4
-        version: 3.2.4(chokidar@3.6.0)
-    devDependencies:
-      '@types/nunjucks':
-        specifier: ^3.2.6
-        version: 3.2.6
       '@velund/core':
         specifier: workspace:^
         version: link:../core
@@ -140,42 +103,6 @@ importers:
       '@types/node':
         specifier: ^24.3.0
         version: 24.3.0
-    devDependencies:
-      '@velund/core':
-        specifier: workspace:^
-        version: link:../core
-
-  packages/php:
-    dependencies:
-      '@sinclair/typebox':
-        specifier: ^0.34.40
-        version: 0.34.40
-      '@types/node':
-        specifier: ^24.3.0
-        version: 24.3.0
-    devDependencies:
-      '@velund/core':
-        specifier: workspace:^
-        version: link:../core
-
-  packages/python:
-    dependencies:
-      '@sinclair/typebox':
-        specifier: ^0.34.40
-        version: 0.34.40
-      '@types/node':
-        specifier: ^24.3.0
-        version: 24.3.0
-    devDependencies:
-      '@velund/core':
-        specifier: workspace:^
-        version: link:../core
-
-  packages/twig:
-    dependencies:
-      twing:
-        specifier: ^7.2.1
-        version: 7.2.1
     devDependencies:
       '@velund/core':
         specifier: workspace:^
@@ -752,9 +679,6 @@ packages:
   '@types/node@24.3.0':
     resolution: {integrity: sha512-aPTXCrfwnDLj4VvXrm+UUCQjNEvJgNA8s5F1cvwQU+3KNltTOkBm1j30uNLyqqPNe7gE3KFzImYoZEfLhp4Yow==}
 
-  '@types/nunjucks@3.2.6':
-    resolution: {integrity: sha512-pHiGtf83na1nCzliuAdq8GowYiXvH5l931xZ0YEHaLMNFgynpEqx+IPStlu7UaDkehfvl01e4x/9Tpwhy7Ue3w==}
-
   '@types/qs@6.14.0':
     resolution: {integrity: sha512-eOunJqu0K1923aExK6y8p6fsihYEn/BYuQ4g0CxAAgFc4b/ZLN4CrsRZ55srTdqoiLzU2B2evC+apEIxprEzkQ==}
 
@@ -772,15 +696,6 @@ packages:
 
   '@types/strip-json-comments@0.0.30':
     resolution: {integrity: sha512-7NQmHra/JILCd1QqpSzl8+mJRc8ZHz3uDm8YV1Ks9IhK0epEiTw8aIErbvH9PI+6XbqhyIQy3462nEsn7UVzjQ==}
-
-  '@velund/core@1.0.1':
-    resolution: {integrity: sha512-7Y4KyVlcjV9rR1tr+9SOQIAI5lyyPtbI8ecaOMkyjrSNh1YMYwd8SJvHlZCK4V2uq/6o6x/HLzHt3wv/dwbPUQ==}
-
-  '@velund/html@1.0.1':
-    resolution: {integrity: sha512-QYYWcNTddSq+YNPS65zeLZUyLXly2RqGOPoEDOE7I6iXLhfzpdBxSJ5PRIuVhq+K5DqPR4wQ63z7sb/CE9OTyg==}
-
-  '@velund/node@1.0.1':
-    resolution: {integrity: sha512-4uC2o76c7IxRlju3y4uHfkpT+Nj6dakhwSDA6aHnxuia78hIwzGLvVDO16NKyal6EqU+ZkE3hMnDF02r5bWrKA==}
 
   '@vitejs/plugin-vue@6.0.1':
     resolution: {integrity: sha512-+MaE752hU0wfPFJEUAIxqw18+20euHHdxVtMvbFcOEpjEyfqXH/5DCoTHiVJ0J29EhTJdoTkjEv5YBKU9dnoTw==}
@@ -1714,11 +1629,6 @@ packages:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
     engines: {node: '>= 0.4'}
 
-  typescript@5.8.3:
-    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
-    engines: {node: '>=14.17'}
-    hasBin: true
-
   typescript@5.9.2:
     resolution: {integrity: sha512-CWBzXQrc/qOkhidw1OzBTQuYRbfyxDXJMVJ1XNwUHGROVmuaeiEm3OslpZ1RV96d7SKKjZKrSJu3+t/xlw3R9A==}
     engines: {node: '>=14.17'}
@@ -1747,13 +1657,6 @@ packages:
   vary@1.1.2:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
-
-  velund@1.0.2:
-    resolution: {integrity: sha512-DpFk62iXHsfmA4UnOrjgrbLgubfbRuSbq4WgdhnUxB7l7S5pfDOlaX67tWpEe4SY8PpMjaEKQTxxfL2QZyhArQ==}
-    peerDependencies:
-      '@sinclair/typebox': ^0.34.39
-      esbuild: ^0.25.9
-      vite: ^7.1.2
 
   vite@7.1.3:
     resolution: {integrity: sha512-OOUi5zjkDxYrKhTV3V7iKsoS37VUM7v40+HuwEmcrsf11Cdx9y3DIr2Px6liIcZFwt3XSRpQvFpL3WVy7ApkGw==}
@@ -2205,8 +2108,6 @@ snapshots:
     dependencies:
       undici-types: 7.10.0
 
-  '@types/nunjucks@3.2.6': {}
-
   '@types/qs@6.14.0': {}
 
   '@types/range-parser@1.2.7': {}
@@ -2225,17 +2126,6 @@ snapshots:
   '@types/strip-bom@3.0.0': {}
 
   '@types/strip-json-comments@0.0.30': {}
-
-  '@velund/core@1.0.1':
-    dependencies:
-      '@sinclair/typebox': 0.34.40
-
-  '@velund/html@1.0.1': {}
-
-  '@velund/node@1.0.1':
-    dependencies:
-      '@sinclair/typebox': 0.34.40
-      '@types/node': 24.3.0
 
   '@vitejs/plugin-vue@6.0.1(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0))(vue@3.5.19(typescript@5.9.2))':
     dependencies:
@@ -3248,8 +3138,6 @@ snapshots:
       es-errors: 1.3.0
       is-typed-array: 1.1.15
 
-  typescript@5.8.3: {}
-
   typescript@5.9.2: {}
 
   undici-types@6.21.0: {}
@@ -3265,18 +3153,6 @@ snapshots:
   v8-compile-cache-lib@3.0.1: {}
 
   vary@1.1.2: {}
-
-  velund@1.0.2(@sinclair/typebox@0.34.40)(esbuild@0.25.9)(vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0)):
-    dependencies:
-      '@sinclair/typebox': 0.34.40
-      '@velund/core': 1.0.1
-      '@velund/html': 1.0.1
-      '@velund/node': 1.0.1
-      chokidar: 4.0.3
-      esbuild: 0.25.9
-      fast-glob: 3.3.3
-      node-html-parser: 7.0.1
-      vite: 7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0)
 
   vite@7.1.3(@types/node@24.3.0)(jiti@2.5.1)(lightningcss@1.30.1)(sass@1.90.0):
     dependencies:
