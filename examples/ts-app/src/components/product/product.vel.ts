@@ -1,6 +1,6 @@
-import { defineComponent } from '@velund/vite/common';
+import { defineComponent } from 'velund/common';
 import { ProductType } from '../../shared/types';
-import template from './template.j2';
+import template from './template.twig';
 import { Type } from '@sinclair/typebox';
 
 export default defineComponent({

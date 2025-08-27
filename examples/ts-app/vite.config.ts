@@ -1,25 +1,21 @@
 import { defineConfig } from 'vite';
-import velund from '@velund/vite';
+import velund from 'velund';
 import tailwindcss from '@tailwindcss/vite';
 import vue from '@vitejs/plugin-vue';
-import phpGenerator from '@velund/php';
-import pythonGenerator from '@velund/python';
-import twigRenderer from '@velund/twig';
-import jinjaRenderer from '@velund/jinja';
+
+import phpGenerator from '@zebrains/velund-php';
+import twigRenderer from '@zebrains/velund-twig';
 
 export default defineConfig({
   plugins: [
     velund({
-      generator: 'node',
+      generator: 'php',
       renderer: 'twig',
-      generators: [phpGenerator(), pythonGenerator()],
-      renderers: [twigRenderer(), jinjaRenderer()],
+      generators: [phpGenerator()],
+      renderers: [twigRenderer()],
       strictTemplateExtensions: false,
     }),
     vue(),
     tailwindcss(),
   ],
-  build: {
-    outDir: '../express-app/velund',
-  },
 });

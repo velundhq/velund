@@ -64,6 +64,12 @@ importers:
       '@vue/tsconfig':
         specifier: ^0.8.1
         version: 0.8.1(typescript@5.9.2)(vue@3.5.19(typescript@5.9.2))
+      '@zebrains/velund-php':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@zebrains/velund-twig':
+        specifier: ^1.0.2
+        version: 1.0.2
       velund:
         specifier: workspace:^
         version: link:../../packages/velund
@@ -743,6 +749,12 @@ packages:
         optional: true
       vue:
         optional: true
+
+  '@zebrains/velund-php@1.0.1':
+    resolution: {integrity: sha512-vKI4bhGOAVvftZZVjTb/0iQKQNn7tMhOp5gjPkkHHlZKSJgNKyAjTPd2j+CQYQ+uis4z6hKVRajdb1WNzL44QA==}
+
+  '@zebrains/velund-twig@1.0.2':
+    resolution: {integrity: sha512-874l9lDH4CcIw6GlkSXgUSkiLdhxOYlec4Utb4wTNt1f4wX9/tx2s8jJ9W72z4EUGCCD3RAIrT3f823+yTRXxg==}
 
   a-sync-waterfall@1.0.1:
     resolution: {integrity: sha512-RYTOHHdWipFUliRFMCS4X2Yn2X8M87V/OpSqWzKKOGhzqyUxzyVmhHDH9sAvG+ZuQf/TAOFsLCpMw09I1ufUnA==}
@@ -2191,6 +2203,14 @@ snapshots:
     optionalDependencies:
       typescript: 5.9.2
       vue: 3.5.19(typescript@5.9.2)
+
+  '@zebrains/velund-php@1.0.1':
+    dependencies:
+      '@sinclair/typebox': 0.34.40
+
+  '@zebrains/velund-twig@1.0.2':
+    dependencies:
+      twing: 7.2.1
 
   a-sync-waterfall@1.0.1: {}
 
