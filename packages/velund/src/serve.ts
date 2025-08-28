@@ -1,20 +1,25 @@
-import chokidar from 'chokidar';
-import url from 'url';
-import type { Plugin, ViteDevServer } from 'vite';
-import { iTwigPluginConfig } from './types';
+import { TypeCompiler, ValueError } from '@sinclair/typebox/compiler';
 import {
   VelundComponentDescriptor,
   VelundRendererDescriptor,
 } from '@velund/core';
-import { TypeCompiler, ValueError } from '@sinclair/typebox/compiler';
+import chokidar from 'chokidar';
+import url from 'url';
+import { match } from 'path-to-regexp';
+
+import type { Plugin, ViteDevServer } from 'vite';
 import genHomePage from './pages/home';
+import { iTwigPluginConfig } from './types';
+import { VelundAppDescriptor } from './common/defineVelundApp';
+import gen404Page from './pages/404';
+import genErrorPage from './pages/error';
 
 export default function devServer(
   options: iTwigPluginConfig,
   renderer: VelundRendererDescriptor
 ): Partial<Plugin> {
   let entry: string;
-
+  let app: VelundAppDescriptor;
   let registeredComponents = new Map<string, VelundComponentDescriptor>();
 
   // обновление списка шаблонов и регистрация в Twing
@@ -24,7 +29,10 @@ export default function devServer(
     const newComponentNames: string[] = [];
     const newComponents: VelundComponentDescriptor[] = [];
     registeredComponents = new Map();
-    entryModule.default?.components?.forEach((comp: any) => {
+    if (entryModule?.default?.components) {
+      app = entryModule.default;
+    }
+    app?.components?.forEach((comp: any) => {
       if (!comp) return;
       newComponents.push(comp);
       newComponentNames.push(comp.name);
@@ -90,84 +98,118 @@ export default function devServer(
         await updateTemplates(server);
         server.ws.send({ type: 'full-reload', path: '*' });
       });
-
       // middleware для рендера шаблонов по URL
       server.middlewares.use(async (req, res, next) => {
         try {
-          if (!req.url) return next();
+          if (
+            !req.url ||
+            req.url.startsWith('/src') ||
+            req.url.startsWith('/@')
+          ) {
+            return next();
+          }
           const parsedUrl = url.parse(req.url);
 
           await updateTemplates(server);
 
-          if (['', '/'].includes(parsedUrl.pathname || '')) {
-            res.setHeader('Content-Type', `text/html; charset=utf-8`);
+          let isMetaRender: boolean = false;
+          let component: VelundComponentDescriptor | undefined;
+          let context: Record<string, any> = {};
 
-            res.end(genHomePage(Array.from(registeredComponents.values())));
-            return;
-          }
-
-          const isMetaRender = parsedUrl.pathname
-            ?.toString()
-            .replace(/\/+$/, '')
-            .startsWith(options.renderUrl);
-          let query = Object.fromEntries(
-            new URLSearchParams(parsedUrl.query || '')
-          );
-          const componentName = isMetaRender
-            ? query.component
-            : parsedUrl.pathname?.slice(1).replace(/\/+$/, '');
-          let context = {};
-          if (isMetaRender) {
-            context = JSON.parse(query?.context || '{}');
-          } else {
-            context = query?.props || query;
-          }
-
-          if (!componentName || !registeredComponents.has(componentName)) {
-            next();
-            return;
-          }
-          const component = registeredComponents.get(componentName);
-          const validateSchema = component?.prepare
-            ? component?.propsSchema || null
-            : component?.contextSchema || null;
-          if (validateSchema) {
-            const cSchema = TypeCompiler.Compile(validateSchema);
-            if (!cSchema.Check(context || {})) {
-              console.warn(
-                `[WARN]: Invalid context data for "${componentName}":`
+          if (app) {
+            for (const route of app.routes) {
+              const matched = match(route.path, { decode: decodeURIComponent })(
+                req.url
               );
-              console.warn(
-                formatValidationErrors([...cSchema.Errors(context || {})])
-              );
+              if (matched) {
+                component = route.component as VelundComponentDescriptor;
+                context = matched.params;
+                break;
+              }
             }
           }
 
-          const renderResult = await renderer.render(
-            componentName,
-            context || {},
-            true
-          );
+          if (!component) {
+            if (['', '/'].includes(parsedUrl.pathname || '')) {
+              res.writeHead(302, { Location: '/__velund' });
+              res.end();
+              return;
+            }
 
-          renderResult.html = renderResult.html.replace(/@\//g, '/src/');
+            if (parsedUrl.pathname?.replace(/\/+$/, '') == '/__velund') {
+              res.setHeader('Content-Type', `text/html; charset=utf-8`);
+              res.end(genHomePage(Array.from(registeredComponents.values())));
+              return;
+            }
 
-          res.setHeader(
-            'Content-Type',
-            `${isMetaRender ? 'application/json' : 'text/html'}; charset=utf-8`
-          );
+            isMetaRender =
+              parsedUrl.pathname
+                ?.toString()
+                .replace(/\/+$/, '')
+                .startsWith(options.renderUrl) || false;
 
-          res.end(
-            isMetaRender
-              ? JSON.stringify(renderResult, null, '\t')
-              : renderResult.html +
-                  '\n<script type="module" src="/@vite/client"></script>'
-          );
+            const query = Object.fromEntries(
+              new URLSearchParams(parsedUrl.query || '')
+            );
+
+            const componentName = isMetaRender
+              ? query.component
+              : parsedUrl.pathname?.slice(1).replace(/\/+$/, '');
+            context = {
+              ...context,
+              ...(isMetaRender
+                ? JSON.parse(query?.context || '{}')
+                : query?.props || query),
+            };
+
+            component = registeredComponents.get(componentName || '');
+          }
+
+          if (component) {
+            const validateSchema = component?.prepare
+              ? component?.propsSchema || null
+              : component?.contextSchema || null;
+            if (validateSchema) {
+              const cSchema = TypeCompiler.Compile(validateSchema);
+              if (!cSchema.Check(context || {})) {
+                console.warn(
+                  `[WARN]: Invalid context data for "${component.name}":`
+                );
+                console.warn(
+                  formatValidationErrors([...cSchema.Errors(context || {})])
+                );
+              }
+            }
+
+            const renderResult = await renderer.render(
+              component.name,
+              context || {},
+              true
+            );
+
+            renderResult.html = renderResult.html.replace(/@\//g, '/src/');
+
+            res.setHeader(
+              'Content-Type',
+              `${isMetaRender ? 'application/json' : 'text/html'}; charset=utf-8`
+            );
+
+            res.end(
+              isMetaRender
+                ? JSON.stringify(renderResult, null, '\t')
+                : renderResult.html +
+                    '\n<script type="module" src="/@vite/client"></script>'
+            );
+            return;
+          } else {
+            res.statusCode = 404;
+            res.end(gen404Page());
+            return;
+          }
         } catch (err: any) {
-          console.error('Twig dev render error:', err);
+          console.error('[ERROR] Velund render error:', err);
           res.statusCode = 500;
-          res.end(
-            `<pre style="color: red; padding: 1rem; border-radius:1rem; background: pink;">${err.stack}</pre><script type="module" src="/@vite/client"></script>`
-          );
+          res.end(genErrorPage(err));
         }
       });
     },

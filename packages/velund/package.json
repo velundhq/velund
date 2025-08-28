@@ -2,11 +2,11 @@
   "name": "velund",
   "description": "Модульная UI-система на Vite для полиглотных бэкендов",
   "private": false,
-  "version": "1.0.5",
+  "version": "1.0.6",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "author": "DNTZ <me@dantezz.ru>",
+  "author": "VelundHQ <velund@dntz.xyz>",
   "files": [
     "dist",
     "types",
@@ -67,13 +67,14 @@
     "vite": "^7.1.2"
   },
   "dependencies": {
+    "@sinclair/typebox": "^0.34.39",
     "@velund/core": "workspace:^",
-    "@velund/node": "workspace:^",
     "@velund/html": "workspace:^",
+    "@velund/node": "workspace:^",
+    "chokidar": "^4.0.3",
     "fast-glob": "^3.3.3",
     "node-html-parser": "^7.0.1",
-    "chokidar": "^4.0.3",
-    "@sinclair/typebox": "^0.34.39"
+    "path-to-regexp": "^8.2.0"
   },
   "publishConfig": {
     "access": "public"
