@@ -2,7 +2,7 @@
   "name": "velund",
   "description": "Модульная UI-система на Vite для полиглотных бэкендов",
   "private": false,
-  "version": "1.0.6",
+  "version": "1.0.7",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

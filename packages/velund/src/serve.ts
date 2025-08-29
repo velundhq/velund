@@ -104,7 +104,9 @@ export default function devServer(
           if (
             !req.url ||
             req.url.startsWith('/src') ||
-            req.url.startsWith('/@')
+            req.url.startsWith('/@') ||
+            req.url.includes('node_modules') ||
+            req.url.includes('vite')
           ) {
             return next();
           }
