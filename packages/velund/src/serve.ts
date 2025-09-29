@@ -13,18 +13,19 @@ import { iTwigPluginConfig } from './types';
 import { VelundAppDescriptor } from './common/defineVelundApp';
 import gen404Page from './pages/404';
 import genErrorPage from './pages/error';
+import { resolveRollupPaths } from './utils/resolveRollupPaths';
 
 export default function devServer(
   options: iTwigPluginConfig,
   renderer: VelundRendererDescriptor
 ): Partial<Plugin> {
-  let entry: string;
   let app: VelundAppDescriptor;
   let registeredComponents = new Map<string, VelundComponentDescriptor>();
 
   // обновление списка шаблонов и регистрация в Twing
   const updateTemplates = async (server: ViteDevServer) => {
-    const input = entry || 'src/main.ts';
+    const { rollupInput } = resolveRollupPaths(server.config);
+    const input = rollupInput;
     const entryModule = await server.ssrLoadModule(input);
     const newComponentNames: string[] = [];
     const newComponents: VelundComponentDescriptor[] = [];
@@ -76,19 +77,6 @@ export default function devServer(
   }
 
   return {
-    configResolved(resolvedConfig) {
-      const config = resolvedConfig;
-      entry =
-        (typeof config.build === 'object'
-          ? Array.isArray(config.build.rollupOptions.input)
-            ? config.build.rollupOptions.input[0]
-            : typeof config.build.rollupOptions.input === 'object'
-              ? config.build.rollupOptions.input[
-                  Object.keys(config.build.rollupOptions.input)[0]
-                ]
-              : config.build.rollupOptions.input
-          : '') || '';
-    },
     configureServer(server) {
       // watcher для изменений
       const watcher = chokidar.watch('./src', {

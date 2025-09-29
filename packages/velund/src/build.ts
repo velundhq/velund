@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import fg from 'fast-glob';
 import { iTwigPluginConfig } from './types';
 import { VelundGeneratorDescriptor } from '@velund/core';
+import { resolveRollupPaths } from './utils/resolveRollupPaths';
 
 const buildPlugin = (
   opts: iTwigPluginConfig,
@@ -17,17 +18,10 @@ const buildPlugin = (
   let assetsDir: string;
   return {
     configResolved(config) {
-      // тут уже есть итоговый конфиг
-      rollupInput = path
-        .resolve(
-          config?.build?.rollupOptions?.input === 'index.html'
-            ? './src/main.ts'
-            : config?.build?.rollupOptions?.input?.toString() || './src/main.ts'
-        )
-        .toString()
-        .replace(/\\/g, '/');
-      outDir = path.resolve(config.build?.outDir);
-      assetsDir = path.resolve(config.build?.assetsDir);
+      const paths = resolveRollupPaths(config);
+      rollupInput = paths.rollupInput;
+      outDir = paths.outDir;
+      assetsDir = paths.assetsDir;
     },
 
     // Сбор ассетов
