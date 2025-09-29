@@ -100,26 +100,31 @@ export default function velund(config?: Partial<iTwigPluginConfig>): Plugin {
     async load(id) {
       if (id !== 'virtual:velund/components') return null;
 
-      // Находим все шаблоны в проекте
       const files = await FastGlob('**/*.vel.{ts,js}', { cwd: process.cwd() });
 
-      // Генерируем импорты
       const imports = files
+        .map((file, index) => `import comp${index} from '/${file}';`)
+        .join('\n');
+
+      const checks = files
         .map(
-          (file: string, index: any) => `import comp${index} from '/${file}';`
+          (_, index) => `
+      if (!comp${index}?.name) {
+        console.warn('[Velund] Warning: template "${files[index]}" is empty or has no name.');
+      } else {
+        components.push(comp${index});
+      }
+    `
         )
         .join('\n');
 
-      const exportObject = files
-        .map((_: any, index: any) => `comp${index}`)
-        .join(', ');
-
       return `
-        ${imports}
-        export default [${exportObject}];
-      `;
+    ${imports}
+    const components = [];
+    ${checks}
+    export default components;
+  `;
     },
-
     async transform(code: string, id: string) {
       for (const ext of templateExtensions) {
         if (id.endsWith(ext)) {

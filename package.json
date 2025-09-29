@@ -7,9 +7,9 @@
     "build": "pnpm -r build",
     "build:vite": "pnpm run -F velund build",
     "build:core": "pnpm run -F @velund/core build",
-    "build:example": "pnpm run -F @velund/example build",
+    "build:example": "pnpm run -F @velund/ts-example-app build",
     "build:docs": "pnpm run -F @velund/docs build",
-    "dev:example": "pnpm run -F @velund/example dev"
+    "dev:example": "pnpm run -F @velund/ts-example-app dev"
   },
   "workspaces": [
     "packages/*"

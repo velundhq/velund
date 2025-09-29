@@ -24,22 +24,36 @@ export default function devServer(
 
   // обновление списка шаблонов и регистрация в Twing
   const updateTemplates = async (server: ViteDevServer) => {
-    const input = entry || 'src/main.ts';
-    const entryModule = await server.ssrLoadModule(input);
-    const newComponentNames: string[] = [];
-    const newComponents: VelundComponentDescriptor[] = [];
-    registeredComponents = new Map();
-    if (entryModule?.default?.components) {
-      app = entryModule.default;
-    }
-    app?.components?.forEach((comp: any) => {
-      if (!comp) return;
-      newComponents.push(comp);
-      newComponentNames.push(comp.name);
-      registeredComponents.set(comp.name, comp);
-    });
+    try {
+      const virtualModule = server.moduleGraph.getModuleById(
+        'virtual:velund/components'
+      );
+      if (virtualModule) {
+        server.moduleGraph.invalidateModule(virtualModule);
+        await server.reloadModule(virtualModule);
+      }
 
-    renderer.setComponents(newComponents);
+      const input = (entry || 'src/main.ts') + '?' + Date.now();
+      const entryModule = await server.ssrLoadModule(input);
+
+      const newComponentNames: string[] = [];
+      const newComponents: VelundComponentDescriptor[] = [];
+      registeredComponents = new Map();
+      if (entryModule?.default?.components) {
+        app = entryModule.default;
+      }
+      for (const comp of app.components || []) {
+        if (!comp) return;
+        newComponents.push(comp);
+        newComponentNames.push(comp.name);
+        registeredComponents.set(comp.name, comp);
+      }
+
+      renderer.setComponents(newComponents);
+    } catch (e: any) {
+      console.error('Error while updating components');
+      console.error(e.stack);
+    }
   };
 
   function formatValidationErrors(errors: ValueError[]): string {
