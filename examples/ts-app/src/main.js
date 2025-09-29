@@ -8,6 +8,6 @@ export default defineVelundApp(templates, [
   },
   {
     path: '/product/:id',
-    component: 'ProductPage2',
+    component: 'ProductPage',
   },
 ]);

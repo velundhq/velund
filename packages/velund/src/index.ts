@@ -5,6 +5,7 @@ import nodeGenerator from '@velund/node';
 import htmlRenderer from '@velund/html';
 import { Plugin } from 'vite';
 import FastGlob from 'fast-glob';
+import { resolveRollupPaths } from './utils/resolveRollupPaths.js';
 
 export default function velund(config?: Partial<iTwigPluginConfig>): Plugin {
   const defaultConfig: iTwigPluginConfig = {
@@ -63,6 +64,7 @@ export default function velund(config?: Partial<iTwigPluginConfig>): Plugin {
     ),
 
     config(config, { command }) {
+      const params = resolveRollupPaths(config);
       // если в конфиге ещё нет resolve, создаём
       config.resolve ??= {};
       config.resolve.extensions ??= [
@@ -90,7 +92,7 @@ export default function velund(config?: Partial<iTwigPluginConfig>): Plugin {
       if (!config.build) config.build = {};
       if (!config.build.rollupOptions) config.build.rollupOptions = {};
       if (!config.build.rollupOptions.input)
-        config.build.rollupOptions.input = 'src/main.ts';
+        config.build.rollupOptions.input = params.rollupInput;
     },
 
     resolveId(id) {
