@@ -56,32 +56,65 @@ export const Button = defineComponent({
 
 ---
 
-## Пример с `prepare`
+## Пример компонента `ProductList.vel.ts` с `prepare`
 
 ```ts
 import { defineComponent } from 'velund';
 import { Type } from '@sinclair/typebox';
+import template from './template.twig';
 
 export const ProductList = defineComponent({
   name: 'ProductList',
+  template,
 
+  // Аргументы для prepare-функции
   propsSchema: Type.Object({
-    title: Type.String(),
+    limit: Type.Optional(Type.Number()),
   }),
 
   // Контекст обязателен, так как есть prepare
   contextSchema: Type.Object({
-    apiUrl: Type.String(),
-  }),
-
-  // Аргументы для prepare-функции
-  prepareSchema: Type.Object({
-    limit: Type.Optional(Type.Number()),
+    products: Type.Array(
+      Type.Object({
+        id: Type.Number(),
+        title: Type.String(),
+        price: Type.Number(),
+        description: Type.String(),
+        category: Type.String(),
+        image: Type.String(),
+        rating: Type.Object({
+          rate: Type.Number(),
+          count: Type.Number(),
+        }),
+      })
+    ),
   }),
 
   async prepare(ctx, args) {
-    const res = await fetch(`${ctx.apiUrl}/products?limit=${args.limit ?? 10}`);
+    const res = await fetch(
+      `http://example.com/api/products?limit=${args.limit ?? 10}`
+    );
     return { products: await res.json() };
   },
 });
+```
+
+## Пример шаблона компонента `template.twig`
+
+```twig
+{% extends "PageLayout" %}
+{% for product in products %}
+	<div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+		<a href="/product/{{product.id}}">
+			<img src="{{ product.image }}" alt="{{product.title}}" class="h-80 w-72 object-cover rounded-t-xl"/>
+			<div class="px-4 py-3 w-72">
+				<span class="text-gray-400 mr-3 uppercase text-xs">{{category}}</span>
+				<p class="text-lg font-bold text-black truncate block capitalize">{{product.title}}</p>
+				<div class="flex items-center">
+					<p class="text-lg font-semibold text-black cursor-auto my-3">${{product.price}}</p>
+				</div>
+			</div>
+		</a>
+	</div>
+{% endfor %}
 ```
