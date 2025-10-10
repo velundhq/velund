@@ -59,7 +59,7 @@ jobs:
               <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             </head>
             <body>
-              Verification: $secrets.YA_VERIFY_KEY
+              Verification: $YA_VERIFY_KEY
             </body>
           </html>
           EOF
