@@ -90,9 +90,9 @@ export const ProductList = defineComponent({
     ),
   }),
 
-  async prepare(ctx, args) {
+  async prepare(props) {
     const res = await fetch(
-      `http://example.com/api/products?limit=${args.limit ?? 10}`
+      `http://example.com/api/products?limit=${props.limit ?? 10}`
     );
     return { products: await res.json() };
   },
