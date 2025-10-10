@@ -47,6 +47,22 @@ jobs:
         run: pnpm install # or pnpm install / yarn install / bun install
       - name: Build with VitePress
         run: pnpm build:docs # or pnpm docs:build / yarn docs:build / bun run docs:build
+      - name: Create verification files
+        env:
+          GOOGLE_VERIFY_KEY: ${{ secrets.GOOGLE_VERIFY_KEY }}
+          YA_VERIFY_KEY: ${{ secrets.YA_VERIFY_KEY }}
+        run: |
+          echo "google-site-verification: $GOOGLE_VERIFY_KEY" > packages/docs/.vitepress/dist/$GOOGLE_VERIFY_KEY.html
+          cat <<EOF > packages/docs/.vitepress/dist/yandex_$YA_VERIFY_KEY.html
+          <html>
+            <head>
+              <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            </head>
+            <body>
+              Verification: $secrets.YA_VERIFY_KEY
+            </body>
+          </html>
+          EOF
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
