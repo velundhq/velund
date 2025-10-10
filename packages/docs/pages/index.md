@@ -9,6 +9,7 @@ hero:
   image:
     src: /logo-hero.svg
     alt: Vituum
+    fetchpriority: 'high'
   actions:
     - theme: brand
       text: Быстрый старт
