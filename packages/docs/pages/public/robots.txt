@@ -1,0 +1,10 @@
+# robots.txt for https://velund.dntz.xyz/
+
+User-agent: *
+
+Disallow: /search
+Disallow: /?*
+
+Allow: /
+
+Sitemap: https://velund.dntz.xyz/sitemap.xml

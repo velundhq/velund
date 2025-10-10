@@ -9,7 +9,7 @@ const ogUrl = 'https://velund.dntz.xyz';
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   srcDir: 'pages',
-
+  lastUpdated: true,
   title: `${ogTitle} | ${ogDescription}`,
   description: ogDescription,
   appearance: 'force-dark',
@@ -65,5 +65,8 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/DanteZZ/velund' },
     ],
+  },
+  sitemap: {
+    hostname: 'https://velund.dntz.xyz',
   },
 });
